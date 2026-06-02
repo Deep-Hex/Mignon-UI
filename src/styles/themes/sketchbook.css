@@ -1,0 +1,430 @@
+/* ==========================================================================
+   7. SKETCH BOOK (Hand-Drawn Pencil & Slate Chalkboard Aesthetic)
+   ========================================================================== */
+
+/* Light Mode — Warm Textured Notebook / Ruled Pencil Sketch Pad */
+.theme-sketchbook-light {
+    --bg: #fcfaf2;
+    /* Cream Parchment Paper */
+    --bg-dot: #fcfaf2;
+    --bg-window: #fffefc;
+    /* Clean Sheet of Paper */
+    --bg-chat: #fffefc;
+    --bg-input: #fcfaf2;
+    /* Warm cream input well */
+    --bg-bubble-bot: #f3eedf;
+    /* Light graphite-shaded bot bubble */
+    --bg-bubble-user: #e2f0fd;
+    /* Soft ink-blue wash user bubble */
+    --text-bubble-bot: #1a2327;
+    /* Rich dark graphite pencil */
+    --text-bubble-user: #1a2327;
+    --bg-grid: #e2e8f0;
+    --bg-lore-hover: #fcfaf2;
+    --bg-nav-container: #2f3e46;
+    /* Soft charcoal header */
+    --bg-tab-active: #e2e8f0;
+    --text-tab-active: #1a2327;
+    --bg-card-hover: #fbfaf5;
+    --bg-card-active: #f5f3e9;
+
+    /* Sketchbook Bot Accents - Crayon Highlighter Tones (Light Mode) */
+    --accent-cyan-bg: #dbeafe;
+    /* Highlighter Blue */
+    --accent-magenta-bg: #fee2e2;
+    /* Highlighter Rose */
+    --accent-purple-bg: #f3e8ff;
+    /* Highlighter Lavender */
+    --accent-amber-bg: #fef9c3;
+    /* Highlighter Amber */
+    --accent-emerald-bg: #dcfce7;
+    /* Highlighter Mint */
+
+    --accent-cyan-text: #1a2327;
+    --accent-magenta-text: #1a2327;
+    --accent-purple-text: #1a2327;
+    --accent-amber-text: #1a2327;
+    --accent-emerald-text: #1a2327;
+
+    --border: #2f3e46;
+    /* Graphite pencil outline */
+    --border-width: 2px;
+    --shadow-color: #2f3e46;
+    --shadow-sm: none !important;
+    /* No shadows anywhere */
+    --shadow-md: none !important;
+
+    --pink: #db2777;
+    --blue: #2563eb;
+    --purple: #7c3aed;
+    --primary: #2f3e46;
+    /* Charcoal grey branding */
+    --primary-text: #fffefc;
+    --cat-fur: #1a2327;
+    /* Charcoal grey sketched cat */
+
+    --text: #1a2327;
+    /* Dark graphite */
+    --text-sec: #475569;
+    --text-muted: #64748b;
+
+    --status-online: #16a34a;
+    --status-offline: #dc2626;
+
+    --font-head: 'Architects Daughter', cursive;
+    --font-body: 'Architects Daughter', cursive;
+    --font-code: 'Architects Daughter', cursive;
+}
+
+/* Dark Mode — Charcoal Slate Classroom Blackboard / Chalk Sketch */
+.theme-sketchbook-dark,
+.dark-theme.theme-sketchbook-dark {
+    --bg: #151518;
+    /* Deep Blackboard Charcoal */
+    --bg-dot: #151518;
+    --bg-window: #1e1e22;
+    /* Dark Slate Pane */
+    --bg-chat: #1e1e22;
+    --bg-input: #25252b;
+    /* Muted blackboard input well */
+    --bg-bubble-bot: #2c2c35;
+    /* Dark chalk charcoal */
+    --bg-bubble-user: #1e293b;
+    /* Slate blueprint blue user bubble */
+    --text-bubble-bot: #f4f4f5;
+    /* Soft chalk white text */
+    --text-bubble-user: #f4f4f5;
+    --bg-grid: #2d2d30;
+    --bg-lore-hover: #222226;
+    --bg-nav-container: #151518;
+    --bg-tab-active: #2e3b4e;
+    --text-tab-active: #ffffff;
+    --bg-card-hover: #202024;
+    --bg-card-active: #27272a;
+
+    /* Sketchbook Bot Accents - Luminous Chalk Tones (Dark Mode) */
+    --accent-cyan-bg: #1e3a8a;
+    /* Slate Blue Chalk */
+    --accent-magenta-bg: #881337;
+    /* Rose Chalk */
+    --accent-purple-bg: #581c87;
+    /* Violet Chalk */
+    --accent-amber-bg: #78350f;
+    /* Gold Chalk */
+    --accent-emerald-bg: #064e3b;
+    /* Green Chalk */
+
+    --accent-cyan-text: #f4f4f5;
+    --accent-magenta-text: #f4f4f5;
+    --accent-purple-text: #f4f4f5;
+    --accent-amber-text: #f4f4f5;
+    --accent-emerald-text: #f4f4f5;
+
+    --border: #a1a1aa;
+    /* Chalky white border */
+    --border-width: 2px;
+    --shadow-color: #0a0a0c;
+    --shadow-sm: none !important;
+    --shadow-md: none !important;
+
+    --pink: #f472b6;
+    /* Chalk Pink */
+    --blue: #93c5fd;
+    /* Chalk Blue */
+    --purple: #c084fc;
+    /* Chalk Violet */
+    --primary: #ffd700;
+    /* Glowing pencil lead yellow */
+    --primary-text: #151518;
+    --cat-fur: #ffffff;
+    /* White chalk-drawn cat */
+
+    --text: #f4f4f5;
+    /* Chalky white */
+    --text-sec: #cbd5e1;
+    --text-muted: #94a3b8;
+
+    --status-online: #4ade80;
+    --status-offline: #f87171;
+
+    --font-head: 'Architects Daughter', cursive;
+    --font-body: 'Architects Daughter', cursive;
+    --font-code: 'Architects Daughter', cursive;
+}
+
+/* ==========================================================================
+   ORGANIC HANDWRITING FONTS OVERRIDES
+   ========================================================================== */
+.theme-sketchbook-light,
+.theme-sketchbook-light body,
+.theme-sketchbook-light button,
+.theme-sketchbook-light input,
+.theme-sketchbook-light textarea,
+.theme-sketchbook-light select,
+.theme-sketchbook-dark,
+.theme-sketchbook-dark body,
+.theme-sketchbook-dark button,
+.theme-sketchbook-dark input,
+.theme-sketchbook-dark textarea,
+.theme-sketchbook-dark select {
+    font-family: 'Architects Daughter', cursive, sans-serif !important;
+}
+
+/* Headings will use 'Architects Daughter' for that premium hand-sketched block style! */
+.theme-sketchbook-light h1,
+.theme-sketchbook-light h2,
+.theme-sketchbook-light h3,
+.theme-sketchbook-light h4,
+.theme-sketchbook-light .nav-title,
+.theme-sketchbook-light .modal-header h2,
+.theme-sketchbook-light .char-name,
+.theme-sketchbook-light .tab-btn,
+.theme-sketchbook-dark h1,
+.theme-sketchbook-dark h2,
+.theme-sketchbook-dark h3,
+.theme-sketchbook-dark h4,
+.theme-sketchbook-dark .nav-title,
+.theme-sketchbook-dark .modal-header h2,
+.theme-sketchbook-dark .char-name,
+.theme-sketchbook-dark .tab-btn {
+    font-family: 'Architects Daughter', cursive, sans-serif !important;
+    letter-spacing: 0.5px;
+}
+
+/* Ensure inputs are easily typed */
+.theme-sketchbook-light .chat-input-area textarea,
+.theme-sketchbook-dark .chat-input-area textarea {
+    font-size: 1.25rem !important;
+    line-height: 1.3 !important;
+}
+
+/* ==========================================================================
+   DIALOGUE & ACTION STYLING LAWS
+   ========================================================================== */
+.theme-sketchbook-light .msg-body-content,
+.theme-sketchbook-dark .msg-body-content {
+    font-family: 'Architects Daughter', cursive, sans-serif !important;
+    font-size: 1.0rem !important;
+    /* Made slightly smaller to differentiate from character names */
+    line-height: 1.5 !important;
+    font-weight: bold !important;
+    /* Dialogue MUST be bold */
+}
+
+/* Action text (asterisks) standard weight italicized */
+.theme-sketchbook-light .action-text,
+.theme-sketchbook-dark .action-text {
+    font-family: 'Architects Daughter', cursive, sans-serif !important;
+    font-size: 1.05rem !important;
+    font-weight: normal !important;
+    font-style: italic !important;
+}
+
+/* High contrast action colors for legibility overrides */
+.theme-sketchbook-light .action-text {
+    color: #c2410c !important;
+    /* Rich graphite-red pencil ink */
+}
+
+.theme-sketchbook-dark .action-text {
+    color: #facc15 !important;
+    /* Highly legible chalk yellow on blackboard colors */
+}
+
+/* Ensure secondary details remain legible */
+.theme-sketchbook-light .char-name,
+.theme-sketchbook-light .msg-username,
+.theme-sketchbook-light .msg-sender-name {
+    color: #1a2327 !important;
+    font-family: 'Architects Daughter', cursive, sans-serif !important;
+    font-weight: bold !important;
+    font-size: 1.15rem !important;
+}
+
+.theme-sketchbook-dark .char-name,
+.theme-sketchbook-dark .msg-username,
+.theme-sketchbook-dark .msg-sender-name {
+    color: #ffffff !important;
+    font-family: 'Architects Daughter', cursive, sans-serif !important;
+    font-weight: bold !important;
+    font-size: 1.15rem !important;
+}
+
+/* ==========================================================================
+   HAND-DRAWN BORDERS — SVG displacement filter
+   ========================================================================== */
+
+/* Panels & Modals */
+.theme-sketchbook-light .modal-box,
+.theme-sketchbook-dark .modal-box,
+.theme-sketchbook-light .sidebar,
+.theme-sketchbook-dark .sidebar,
+.theme-sketchbook-light .chat-view,
+.theme-sketchbook-dark .chat-view,
+.theme-sketchbook-light .world-detail-view,
+.theme-sketchbook-dark .world-detail-view {
+    border: 2px solid var(--border) !important;
+    border-radius: 12px 18px 10px 14px / 16px 12px 14px 11px !important;
+    box-shadow: none !important;
+    filter: url(#sketch-border);
+}
+
+/* Cards & List Items */
+.theme-sketchbook-light .char-card,
+.theme-sketchbook-light .room-item,
+.theme-sketchbook-light .lore-item-card,
+.theme-sketchbook-light .feature-card,
+.theme-sketchbook-light .world-card,
+.theme-sketchbook-light .char-list-item,
+.theme-sketchbook-light .lore-item,
+.theme-sketchbook-dark .char-card,
+.theme-sketchbook-dark .room-item,
+.theme-sketchbook-dark .lore-item-card,
+.theme-sketchbook-dark .feature-card,
+.theme-sketchbook-dark .world-card,
+.theme-sketchbook-dark .char-list-item,
+.theme-sketchbook-dark .lore-item {
+    border: 2px solid var(--border) !important;
+    border-radius: 15px 5px 12px 7px / 5px 15px 7px 12px !important;
+    box-shadow: none !important;
+    filter: url(#sketch-border);
+}
+
+/* Buttons & Tab Controls */
+.theme-sketchbook-light .primary-btn,
+.theme-sketchbook-light .secondary-btn,
+.theme-sketchbook-light .tab-btn,
+.theme-sketchbook-dark .primary-btn,
+.theme-sketchbook-dark .secondary-btn,
+.theme-sketchbook-dark .tab-btn {
+    border: 2px solid var(--border) !important;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px !important;
+    box-shadow: none !important;
+    transition: all 0.15s ease !important;
+    filter: url(#sketch-border);
+}
+
+.theme-sketchbook-light .primary-btn:hover,
+.theme-sketchbook-light .secondary-btn:hover,
+.theme-sketchbook-light .tab-btn:hover,
+.theme-sketchbook-dark .primary-btn:hover,
+.theme-sketchbook-dark .secondary-btn:hover,
+.theme-sketchbook-dark .tab-btn:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Avatars — organic blob shape */
+.theme-sketchbook-light .char-avatar,
+.theme-sketchbook-light .char-list-avatar,
+.theme-sketchbook-dark .char-avatar,
+.theme-sketchbook-dark .char-list-avatar {
+    border: 2px solid var(--border) !important;
+    border-radius: 35% 65% 55% 45% / 45% 45% 55% 55% !important;
+    box-shadow: none !important;
+    filter: url(#sketch-border);
+}
+
+/* Chat Input Textarea */
+.theme-sketchbook-light .chat-input-area textarea,
+.theme-sketchbook-dark .chat-input-area textarea {
+    border: 2px solid var(--border) !important;
+    border-radius: 25px 10px 20px 8px / 8px 25px 10px 20px !important;
+    box-shadow: none !important;
+    filter: url(#sketch-border);
+}
+
+/* Chat Message Bubbles */
+.theme-sketchbook-light .msg-bubble,
+.theme-sketchbook-dark .msg-bubble,
+.theme-sketchbook-light .typing-indicator,
+.theme-sketchbook-dark .typing-indicator {
+    border: 2px solid var(--border) !important;
+    box-shadow: none !important;
+    filter: url(#sketch-bubble);
+}
+
+.theme-sketchbook-light .msg-bubble-wrapper.user .msg-bubble,
+.theme-sketchbook-dark .msg-bubble-wrapper.user .msg-bubble {
+    border-radius: 20px 6px 18px 16px / 8px 18px 12px 18px !important;
+}
+
+.theme-sketchbook-light .msg-bubble-wrapper.bot .msg-bubble,
+.theme-sketchbook-dark .msg-bubble-wrapper.bot .msg-bubble {
+    border-radius: 6px 20px 16px 18px / 18px 8px 18px 12px !important;
+}
+
+/* Input fields and selects */
+.theme-sketchbook-light input:not([type="range"]):not([type="file"]):not([type="checkbox"]):not([type="radio"]),
+.theme-sketchbook-light select,
+.theme-sketchbook-dark input:not([type="range"]):not([type="file"]):not([type="checkbox"]):not([type="radio"]),
+.theme-sketchbook-dark select {
+    border: 2px solid var(--border) !important;
+    border-radius: 8px 4px 6px 3px / 4px 8px 3px 6px !important;
+    box-shadow: none !important;
+    filter: url(#sketch-border);
+}
+
+
+.theme-sketchbook-light body,
+.theme-sketchbook-dark body {
+    background-image: none !important;
+}
+
+/* ==========================================================================
+   NOTEBOOK PAPERS & BACKGROUNDS
+   ========================================================================== */
+
+/* Light Mode: Hand-drawn doodles notebook wallpaper */
+.theme-sketchbook-light .chat-history {
+    background-color: #fffefc !important;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'><g stroke='rgba(47,62,70,0.06)' stroke-width='1.25' fill='none' stroke-linecap='round' stroke-linejoin='round'><g transform='rotate(-6, 75, 75)'><path d='M75,48 C58,48 50,59 50,72 C50,88 63,93 66,101 V109 H84 V101 C87,93 100,88 100,72 C100,59 92,48 75,48 Z M70,66 L75,72 L80,66 M70,72 H80 M66,109 H84 M68,114 H82 M75,40 V28 M42,56 L30,52 M108,56 L120,52 M47,94 L37,102 M103,94 L113,102' /></g><g transform='rotate(12, 25, 25)'><path d='M16,22 L38,22 C44,22 44,35 38,35 L16,35 C10,35 10,12 25,12 L38,12 C47,12 47,43 25,43 C12,43 5,30 18,30' /></g><g transform='rotate(-15, 130, 32)'><path d='M120,20 C105,27 107,45 125,45 C143,45 145,27 130,20 C125,18 122,19 120,20 Z' /></g><g transform='rotate(20, 135, 125)'><path d='M115,135 Q130,116 148,130 M141,120 L148,130 L137,133' /></g><g transform='rotate(30, 25, 75)'><path d='M25,70 L27,74 L31,73 L29,77 L32,80 L28,80 L25,84 L23,80 L19,80 L22,77 L20,73 Z' /></g><g transform='rotate(-20, 135, 75)'><path d='M135,70 L137,74 L141,73 L139,77 L142,80 L138,80 L135,84 L133,80 L129,80 L132,77 L130,73 Z' /></g><g transform='rotate(15, 55, 30)'><path d='M50,30 C50,25 55,23 58,25 C60,27 58,32 55,34 L55,38 M55,42 L55,42.5' /><circle cx='55' cy='42.2' r='0.5' /></g><path d='M75,20 Q80,25 85,20 T95,25 M75,120 Q80,125 85,120 T95,125' /><circle cx='95' cy='45' r='1.5' /><circle cx='95' cy='105' r='1.2' /><circle cx='20' cy='95' r='1.5' /><circle cx='145' cy='100' r='1.5' /></g></svg>") !important;
+    background-size: 160px 160px !important;
+    background-repeat: repeat !important;
+}
+
+/* Dark Mode: Hand-drawn doodles blackboard wallpaper */
+.theme-sketchbook-dark .chat-history {
+    background-color: #1a1a1e !important;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'><g stroke='rgba(255,215,0,0.045)' stroke-width='1.25' fill='none' stroke-linecap='round' stroke-linejoin='round'><g transform='rotate(-6, 75, 75)'><path d='M75,48 C58,48 50,59 50,72 C50,88 63,93 66,101 V109 H84 V101 C87,93 100,88 100,72 C100,59 92,48 75,48 Z M70,66 L75,72 L80,66 M70,72 H80 M66,109 H84 M68,114 H82 M75,40 V28 M42,56 L30,52 M108,56 L120,52 M47,94 L37,102 M103,94 L113,102' /></g><g transform='rotate(12, 25, 25)'><path d='M16,22 L38,22 C44,22 44,35 38,35 L16,35 C10,35 10,12 25,12 L38,12 C47,12 47,43 25,43 C12,43 5,30 18,30' /></g><g transform='rotate(-15, 130, 32)'><path d='M120,20 C105,27 107,45 125,45 C143,45 145,27 130,20 C125,18 122,19 120,20 Z' /></g><g transform='rotate(20, 135, 125)'><path d='M115,135 Q130,116 148,130 M141,120 L148,130 L137,133' /></g><g transform='rotate(30, 25, 75)'><path d='M25,70 L27,74 L31,73 L29,77 L32,80 L28,80 L25,84 L23,80 L19,80 L22,77 L20,73 Z' /></g><g transform='rotate(-20, 135, 75)'><path d='M135,70 L137,74 L141,73 L139,77 L142,80 L138,80 L135,84 L133,80 L129,80 L132,77 L130,73 Z' /></g><g transform='rotate(15, 55, 30)'><path d='M50,30 C50,25 55,23 58,25 C60,27 58,32 55,34 L55,38 M55,42 L55,42.5' /><circle cx='55' cy='42.2' r='0.5' /></g><path d='M75,20 Q80,25 85,20 T95,25 M75,120 Q80,125 85,120 T95,125' /><circle cx='95' cy='45' r='1.5' /><circle cx='95' cy='105' r='1.2' /><circle cx='20' cy='95' r='1.5' /><circle cx='145' cy='100' r='1.5' /></g></svg>") !important;
+    background-size: 160px 160px !important;
+    background-repeat: repeat !important;
+}
+
+/* ==========================================================================
+   BOUNCY GRAPHITE DOODLE TYPING ANIMATION
+   ========================================================================== */
+.theme-sketchbook-light .typing-dot,
+.theme-sketchbook-dark .typing-dot {
+    width: 8px !important;
+    height: 8px !important;
+    border: 1.5px solid var(--border) !important;
+    background: var(--text) !important;
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50% !important;
+    /* Asymmetrical pebble dot */
+    animation: sketchbookScribble 1.1s infinite ease-in-out !important;
+}
+
+.theme-sketchbook-light .typing-dot:nth-child(2),
+.theme-sketchbook-dark .typing-dot:nth-child(2) {
+    animation-delay: 0.2s !important;
+}
+
+.theme-sketchbook-light .typing-dot:nth-child(3),
+.theme-sketchbook-dark .typing-dot:nth-child(3) {
+    animation-delay: 0.4s !important;
+}
+
+@keyframes sketchbookScribble {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(0.9) rotate(0deg);
+        opacity: 0.7;
+    }
+
+    50% {
+        transform: translateY(-8px) scale(1.15) rotate(15deg);
+        opacity: 1;
+    }
+}

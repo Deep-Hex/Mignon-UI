@@ -1,0 +1,165 @@
+/* ── MODALS ───────────────────────────────── */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999
+}
+
+.modal-backdrop.active {
+    display: flex
+}
+
+.modal-box {
+    width: 100%;
+    max-width: 600px;
+    background: var(--bg-window);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--r-md);
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+.glassmorphism {
+    backdrop-filter: none;
+}
+
+.modal-header {
+    padding: 16px 24px;
+    border-bottom: var(--border-width) solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--primary);
+    color: var(--primary-text);
+}
+
+.modal-header h2 {
+    font-family: var(--font-head);
+    font-size: 1.2rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.modal-header h2 i {
+    width: 20px;
+    height: 20px;
+    color: var(--primary-text);
+}
+
+.modal-close-btn {
+    background: var(--bg-window);
+    border: var(--border-width) solid var(--border);
+    color: var(--text);
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--r-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.modal-close-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+}
+
+.modal-close-btn i {
+    width: 18px;
+    height: 18px
+}
+
+.modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: var(--bg-chat);
+}
+
+#settings-form,
+#character-form,
+#room-form,
+#lore-form,
+#world-form {
+    overflow: visible;
+}
+
+/* ── CONFIRM DIALOG ───────────────────────── */
+.confirm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    pointer-events: auto;
+    animation: confirmFadeIn 0.2s ease-out;
+}
+
+.confirm-box {
+    width: 90%;
+    max-width: 400px;
+    background: var(--bg-window);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--r-md);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: var(--shadow-md);
+    animation: confirmPopIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.confirm-message {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
+    text-align: center;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.confirm-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.confirm-actions button {
+    flex: 1;
+    max-width: 150px;
+}
+
+@keyframes confirmPopIn {
+    from {
+        transform: scale(0.9) translateY(10px);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes confirmFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+

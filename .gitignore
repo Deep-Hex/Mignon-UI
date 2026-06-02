@@ -1,0 +1,66 @@
+# Python virtual environment
+venv/
+.venv/
+ENV/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Node.js dependencies
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Local Database and Vector Store files (all private user data)
+data/
+lancedb/
+*.db
+*.sqlite
+
+# Serialised JSON dumps (allow seed data, block private dumps)
+*.json
+!data/**/*.json
+!public/**/*.json
+database_dump.json
+AR2.json
+
+# Private Seed Files (personal character cards and custom configs)
+data/seed_*.py
+data/seed_*.py.example
+
+# Ignore compiled frontend assets and custom user-uploaded avatars
+static/assets/
+static/avatars/*
+
+# PyInstaller build artifacts
+build/
+packaging/*.spec
+resources/mascot/*.ico
+
+# IDE / System files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Local Environment secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Developer testing scripts
+scratch/
+tests/
+test.py
+test_benchmark.py
+test_rag_improvements.py
+
+# Tooling
+.agents
+graphify-out/
+.graphifyignore

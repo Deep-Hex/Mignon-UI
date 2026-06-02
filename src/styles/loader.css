@@ -1,0 +1,87 @@
+/* Zero-Latency Y2K Spinner Loader */
+.y2k-loader-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffb7ce;
+    background-image: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    z-index: 9999;
+    font-family: sans-serif;
+}
+
+.y2k-spinner-outer {
+    position: relative;
+    width: 64px;
+    height: 64px;
+}
+
+.y2k-spinner {
+    width: 100%;
+    height: 100%;
+    border: 6px solid #f0f0f0;
+    border-top: 6px solid #6b3649;
+    border-right: 6px solid #a3defe;
+    border-radius: 50%;
+    animation: y2k-spin 1s cubic-bezier(0.53, 0.21, 0.29, 0.87) infinite;
+}
+
+.y2k-spinner-inner {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 40px;
+    height: 40px;
+    border: 4px solid transparent;
+    border-bottom: 4px solid #ffb7ce;
+    border-left: 4px solid #ffb7ce;
+    border-radius: 50%;
+    animation: y2k-spin-reverse 1.5s linear infinite;
+}
+
+.y2k-loader-text {
+    font-size: 14px;
+    font-family: monospace;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #000000;
+}
+
+@keyframes y2k-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes y2k-spin-reverse {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* Dark Theme loader overrides */
+.dark-theme .y2k-loader-container {
+    background-color: #0d0714;
+    background-image: none;
+}
+
+.dark-theme .y2k-spinner {
+    border: 6px solid #1e162b;
+    border-top: 6px solid #e54b7c;
+    border-right: 6px solid #4ba3e3;
+}
+
+.dark-theme .y2k-spinner-inner {
+    border-bottom: 4px solid #e54b7c;
+    border-left: 4px solid #e54b7c;
+}
+
+.dark-theme .y2k-loader-text {
+    color: #f3eef9;
+}
+

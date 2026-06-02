@@ -1,0 +1,46 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    outline: none
+}
+
+body {
+    font-family: var(--font-body);
+    background-color: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+
+
+/* Scrollbar */
+.scrollbar-custom::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+    background: transparent;
+    border: none;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+    background: var(--pink);
+    border-radius: var(--r-full);
+    border: none;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+/* Hide old ambient blobs */
+.ambient-container {
+    display: none;
+}
+

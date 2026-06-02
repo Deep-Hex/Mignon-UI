@@ -1,0 +1,89 @@
+/* ── BUTTONS ─────────────────────────────── */
+.primary-btn {
+    background: var(--blue);
+    border: var(--border-width) solid var(--border);
+    color: var(--text);
+    padding: 10px 16px;
+    border-radius: var(--r-md);
+    font-weight: bold;
+    font-size: .9rem;
+    font-family: var(--font-head);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: var(--shadow-md);
+    transition: var(--tf);
+}
+
+.primary-btn:hover,
+.secondary-btn:hover,
+.circle-btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.primary-btn:active,
+.secondary-btn:active,
+.circle-btn:active {
+    transform: translate(4px, 4px);
+    box-shadow: none;
+}
+
+.primary-btn.full-width {
+    width: 100%
+}
+
+.primary-btn i {
+    width: 16px;
+    height: 16px
+}
+
+.secondary-btn {
+    background: var(--purple);
+    border: var(--border-width) solid var(--border);
+    color: var(--text);
+    padding: 10px 16px;
+    border-radius: var(--r-md);
+    font-weight: bold;
+    font-size: .9rem;
+    font-family: var(--font-head);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: var(--shadow-md);
+    transition: var(--tf);
+}
+
+.secondary-btn i {
+    width: 16px;
+    height: 16px
+}
+
+.circle-btn {
+    background: var(--pink);
+    border: var(--border-width) solid var(--border);
+    color: var(--text);
+    width: 48px;
+    height: 48px;
+    border-radius: var(--r-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-md);
+    transition: var(--tf);
+}
+
+.circle-btn i {
+    width: 20px;
+    height: 20px
+}
+
+.cursor-pointer {
+    cursor: pointer
+}
+

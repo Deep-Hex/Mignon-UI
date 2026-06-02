@@ -1,0 +1,89 @@
+.darf-logo-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: visible;
+}
+
+.darf-logo-wrapper:hover {
+  transform: scale(1.08) rotate(-4deg);
+}
+
+.darf-logo-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Ear Twitching Animation on Hover */
+.darf-logo-wrapper:hover .cat-ear-left {
+  animation: twitch-left 0.6s ease-in-out infinite alternate;
+}
+
+.darf-logo-wrapper:hover .cat-ear-right {
+  animation: twitch-right 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes twitch-left {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(-6deg);
+    transform-origin: 30px 35px;
+  }
+}
+
+@keyframes twitch-right {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(6deg);
+    transform-origin: 70px 35px;
+  }
+}
+
+
+
+/* Infinite Blinking (Both Eyes Blink Synchronously) */
+.cat-eye-left,
+.cat-eye-right {
+  animation: blink 5s infinite;
+  animation-delay: 0s !important;
+}
+
+.cat-eye-left {
+  transform-origin: 36px 55px;
+}
+
+.cat-eye-right {
+  transform-origin: 64px 55px;
+}
+
+@keyframes blink {
+
+  0%,
+  86%,
+  89%,
+  92%,
+  100% {
+    transform: scale(1);
+  }
+
+  87.5%,
+  90.5% {
+    transform: scale(1.08, 0.05);
+  }
+}

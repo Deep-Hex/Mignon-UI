@@ -1,0 +1,227 @@
+/* ── SIDEBAR ─────────────────────────────── */
+.sidebar {
+    width: 320px;
+    flex-shrink: 0;
+    background: var(--bg-window);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--r-md);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    z-index: 12;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+
+/* Logo */
+.sidebar-header {
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: var(--border-width) solid var(--border);
+    background-color: var(--primary);
+    color: var(--primary-text);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px
+}
+
+.logo-icon {
+    font-size: 1.2rem;
+}
+
+.logo-text {
+    font-family: var(--font-head);
+    font-size: 1.4em;
+    font-weight: bold;
+    letter-spacing: 0;
+}
+
+.logo-tag {
+    font-size: .5rem;
+    font-weight: bold;
+    color: #000;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--r-sm);
+    padding: 2px 4px;
+    background: var(--pink);
+    box-shadow: var(--shadow-sm);
+}
+
+.icon-btn {
+    background: var(--bg-window);
+    border: var(--border-width) solid var(--border);
+    color: var(--text);
+    width: 32px;
+    height: 32px;
+    border-radius: var(--r-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--tf);
+    box-shadow: var(--shadow-sm);
+}
+
+.icon-btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+}
+
+.icon-btn.danger {
+    background: var(--pink);
+}
+
+.icon-btn i {
+    width: 16px;
+    height: 16px
+}
+
+/* Tabs */
+.tab-container {
+    display: flex;
+    padding: 12px 12px 0;
+    gap: 8px;
+    border-bottom: var(--border-width) solid var(--border);
+    background: var(--bg-nav-container);
+}
+
+.tab-btn {
+    flex: 1;
+    background: var(--bg-window);
+    border: var(--border-width) solid var(--border);
+    border-bottom: none;
+    color: var(--text);
+    padding: 8px 4px 12px;
+    border-radius: var(--r-md) var(--r-md) 0 0;
+    font-size: .8rem;
+    font-family: var(--font-head);
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    transition: var(--tf);
+    box-shadow: 2px -2px 0px var(--shadow-color);
+    position: relative;
+    top: 2px;
+}
+
+.tab-btn .tab-icon {
+    width: 16px;
+    height: 16px
+}
+
+.tab-btn.active {
+    background: var(--bg-tab-active);
+    color: var(--text-tab-active);
+    box-shadow: 2px -2px 0px var(--shadow-color);
+    top: 2px;
+    z-index: 2;
+}
+
+.tab-btn:not(.active):hover {
+    background: var(--bg-input);
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    padding: 16px;
+    background: var(--bg-window);
+}
+
+.tab-content.active {
+    display: flex
+}
+
+/* Action Bar */
+.action-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.action-bar > button,
+.action-bar > label {
+    flex: 1 1 50%;
+    width: 50%;
+    box-sizing: border-box;
+    justify-content: center;
+    white-space: nowrap;
+    text-align: center;
+}
+
+/* Search */
+.search-bar {
+    position: relative;
+    margin-bottom: 16px
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text);
+    width: 16px;
+    height: 16px;
+    font-weight: bold;
+}
+
+.search-bar input {
+    width: 100%;
+    background: var(--bg-input);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--r-md);
+    padding: 10px 12px 10px 36px;
+    color: var(--text);
+    font-family: var(--font-code);
+    font-size: .9rem;
+    font-weight: bold;
+    box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar input:focus {
+    background: var(--bg-window);
+    outline: none;
+}
+
+/* Sidebar footer */
+.sidebar-footer {
+    margin-top: auto
+}
+
+.sidebar-footer-btn {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--text) !important;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    opacity: 0.75;
+    transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.sidebar-footer-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.sidebar-footer-btn:active {
+    transform: scale(0.95);
+}
