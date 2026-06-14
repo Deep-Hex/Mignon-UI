@@ -3,7 +3,7 @@
 ### Mignon UI
 
 **The Local AI Roleplay Sandbox & Cognitive Storytelling Engine.**<br/>
-Immerse yourself in stories and scenarios with multiple AI characters in a single room. Customize your space with interactive snapping stickers, and choose from stunning aesthetic themes.
+*Immerse yourself in stories and scenarios with multiple AI characters in a single room. Customize your space with interactive snapping stickers, and choose from stunning aesthetic themes.*
 
 <br clear="left"/>
 
