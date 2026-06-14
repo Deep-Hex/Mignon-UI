@@ -917,53 +917,53 @@ html body .chat-history-container .chat-history,
     top: 100%;
     right: 0;
     margin-top: 8px;
-    background: var(--bg-window) !important;
-    border: var(--border-width) solid var(--border) !important;
-    border-radius: var(--r-md) !important;
-    box-shadow: var(--shadow-md) !important;
+    background: var(--bg-window);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-md);
     z-index: 1000;
     min-width: 180px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    padding: 4px 0 !important;
+    padding: 4px 0;
 }
 
 .dropdown-item {
-    display: flex !important;
-    align-items: center !important;
-    gap: 10px !important;
-    width: 100% !important;
-    padding: 10px 14px !important;
-    background: none !important;
-    border: none !important;
-    color: var(--text) !important;
-    font-family: var(--font-body) !important;
-    font-size: 0.85rem !important;
-    font-weight: bold !important;
-    text-align: left !important;
-    cursor: pointer !important;
-    transition: background 0.12s ease, color 0.12s ease !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 14px;
+    background: none;
+    border: none;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease;
 }
 
 .dropdown-item:hover {
-    background: var(--bg-card-hover) !important;
-    color: var(--text) !important;
+    background: var(--bg-card-hover);
+    color: var(--text);
 }
 
 .dropdown-item.danger {
-    color: var(--status-offline, #ef4444) !important;
+    color: var(--status-offline, #ef4444);
 }
 
 .dropdown-item.danger:hover {
-    background: var(--status-offline, #ef4444) !important;
-    color: #ffffff !important;
+    background: var(--status-offline, #ef4444);
+    color: #ffffff;
 }
 
 .dropdown-divider {
-    border: none !important;
-    border-top: var(--border-width) solid var(--border) !important;
-    margin: 4px 0 !important;
+    border: none;
+    border-top: var(--border-width) solid var(--border);
+    margin: 4px 0;
 }
 
 /* Scroll-to-Bottom Floating Button */

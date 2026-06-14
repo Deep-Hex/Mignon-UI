@@ -190,7 +190,7 @@ function splitIntoChildren(entry) {
 
 /**
  * Build a compact character summary that answers questions like
- * "Who is Max?", "What does Millie look like?", "How does Holly behave?"
+ * "Who is Lyra?", "What does Kaelen look like?", "How does Lyra behave?"
  *
  * @param {{ id: number, name: string, personality?: string, scenario?: string, example_dialogue?: string }} char
  * @returns {string}

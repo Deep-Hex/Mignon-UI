@@ -1,5 +1,5 @@
 // src/services/seedData.js
-// Default system settings and character sheets (Millie, Max, Holly, Anya, Lyra, Kaelen) ported from Python data seeds.
+// Default system settings and character sheets (Lyra, Kaelen) ported from Python data seeds.
 
 export const DEFAULT_SETTINGS = {
   id: 1,
