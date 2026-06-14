@@ -1,9 +1,10 @@
-<img src="resources/mascot/mascot_dark_classic.svg" align="left" width="140" style="margin-right: 20px; margin-bottom: 20px;" alt="Mignon UI Mascot" />
+<img src="resources/mascot/mascot_dark_classic.svg" align="left" width="140" style="margin-right: 20px; margin-bottom: 10px;" alt="Mignon UI Mascot" />
 
-# ✦ Mignon UI ✦
-
-> **The Local AI Roleplay Sandbox & Cognitive Storytelling Engine.**
-> Immerse yourself in stories and scenarios with multiple AI characters in a single room. Customize your space with interactive snapping stickers, and choose from stunning aesthetic themes.
+<div style="overflow: hidden;">
+  <h1 style="margin-top: 0; border-bottom: none;">✦ Mignon UI ✦</h1>
+  <p><strong>The Local AI Roleplay Sandbox & Cognitive Storytelling Engine.</strong></p>
+  <p>Immerse yourself in stories and scenarios with multiple AI characters in a single room. Customize your space with interactive snapping stickers, and choose from stunning aesthetic themes.</p>
+</div>
 
 <br clear="left"/>
 
