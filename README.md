@@ -1,6 +1,6 @@
 <img src="resources/mascot/mascot_dark_classic.svg" align="left" width="140" style="margin-right: 20px; margin-bottom: 10px;" alt="Mignon UI Mascot" />
 
-<font size="6"><b>✦ Mignon UI ✦</b></font>
+<font size="10"><b>✦ Mignon UI ✦</b></font>
 
 **The Local AI Roleplay Sandbox & Cognitive Storytelling Engine.**
 
