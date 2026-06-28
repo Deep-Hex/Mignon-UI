@@ -5,41 +5,6 @@ import { getDb } from './db';
 import { safeFetch } from '../utils/safeFetch';
 import * as llm from './llmClient';
 
-function extractActiveModel(json, currentModel) {
-  if (!json) return null;
-
-  const isEmbeddingModel = (name) => {
-    if (!name) return false;
-    const lower = name.toLowerCase();
-    return (
-      lower.includes('embed') ||
-      lower.includes('bge') ||
-      lower.includes('nomic') ||
-      lower.includes('mxbai') ||
-      lower.includes('colbert') ||
-      lower.includes('minilm')
-    );
-  };
-
-  if (json.data && Array.isArray(json.data) && json.data.length > 0) {
-    const modelIds = json.data.map(m => m.id);
-    if (currentModel && modelIds.includes(currentModel) && !isEmbeddingModel(currentModel)) {
-      return currentModel;
-    }
-    const nonEmbedModel = modelIds.find(id => !isEmbeddingModel(id));
-    return nonEmbedModel || json.data[0].id;
-  }
-  if (json.models && Array.isArray(json.models) && json.models.length > 0) {
-    const modelIds = json.models.map(m => m.name || m.id);
-    if (currentModel && modelIds.includes(currentModel) && !isEmbeddingModel(currentModel)) {
-      return currentModel;
-    }
-    const nonEmbedModel = modelIds.find(id => !isEmbeddingModel(id));
-    return nonEmbedModel || (json.models[0].name || json.models[0].id);
-  }
-  return null;
-}
-
 export async function testConnection() {
   try {
     const dbInst = await getDb();
@@ -95,72 +60,21 @@ export async function testConnection() {
       }
     }
 
-    // Local Ollama / Kobold
-    let activeModel = null;
+    // Local Ollama / Kobold / Custom Local
     let connectionSuccess = false;
 
-    // 1. Try standard OpenAI-compat /v1/models endpoint
+    // 1. Try standard OpenAI-compat /v1/models endpoint to verify connectivity
     try {
       const modelsUrl = `${base}/v1/models`;
       const res = await safeFetch(modelsUrl, { method: "GET" });
       if (res.ok) {
         connectionSuccess = true;
-        const json = await res.json();
-        activeModel = extractActiveModel(json, settings?.selected_model);
       }
     } catch {
       // ignore
     }
 
-    // 2. Try native endpoints for model detection
-    if (!activeModel) {
-      try {
-        if (provider === "kobold") {
-          const resNative = await safeFetch(`${base}/api/v1/model`, { method: "GET" });
-          if (resNative.ok) {
-            connectionSuccess = true;
-            const data = await resNative.json();
-            activeModel = data.result;
-          }
-        } else if (provider === "ollama") {
-          const resPs = await safeFetch(`${base}/api/ps`, { method: "GET" });
-          if (resPs.ok) {
-            connectionSuccess = true;
-            const data = await resPs.json();
-            const runningModels = data.models || [];
-            const embedKeywords = ["embed", "bge", "minilm", "e5-", "nomic", "gte-"];
-            const runningChatModels = runningModels.filter(m => 
-              !embedKeywords.some(kw => (m.name || "").toLowerCase().includes(kw))
-            );
-            if (runningChatModels.length > 0) {
-              activeModel = runningChatModels[0].name;
-            }
-          }
-
-          if (!activeModel) {
-            const resTags = await safeFetch(`${base}/api/tags`, { method: "GET" });
-            if (resTags.ok) {
-              connectionSuccess = true;
-              const data = await resTags.json();
-              const installed = data.models || [];
-              const embedKeywords = ["embed", "bge", "minilm", "e5-", "nomic", "gte-"];
-              const chatModels = installed.filter(m => 
-                !embedKeywords.some(kw => (m.name || "").toLowerCase().includes(kw))
-              );
-              if (chatModels.length > 0) {
-                activeModel = chatModels[0].name;
-              } else if (installed.length > 0) {
-                activeModel = installed[0].name;
-              }
-            }
-          }
-        }
-      } catch {
-        // ignore
-      }
-    }
-
-    // 3. Fallback: root check
+    // 2. Fallback: Check the root URL
     if (!connectionSuccess) {
       try {
         const resRoot = await safeFetch(base, { method: "GET" });
@@ -181,15 +95,9 @@ export async function testConnection() {
       return { status: "disconnected", message: `${provider.charAt(0).toUpperCase() + provider.slice(1)} unreachable` };
     }
 
-    // Auto-update selected_model if detected and changed
-    if (activeModel && settings?.selected_model !== activeModel) {
-      await dbInst.execute("UPDATE settings SET selected_model = ? WHERE id = 1", [activeModel]);
-    }
-
     return {
       status: "success",
-      message: `${provider.charAt(0).toUpperCase() + provider.slice(1)} Online`,
-      active_model: activeModel || settings?.selected_model
+      message: `${provider.charAt(0).toUpperCase() + provider.slice(1)} Online`
     };
   } catch (e) {
     console.error("[API] testConnection failed:", e);

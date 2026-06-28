@@ -18,6 +18,7 @@ import { pipeline } from '@huggingface/transformers';
 import { safeFetch } from '../utils/safeFetch';
 import { getDb } from './db';
 import { getSettings } from './crud';
+import { decryptKey } from './llmClient';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 1. Local WASM extractor singleton
@@ -84,7 +85,7 @@ export async function embedTexts(texts) {
   // ── 1. Cloud OpenRouter ───────────────────────────────────────────────────
   if (provider === 'openrouter') {
     try {
-      const apiKey = settings?.openrouter_key || '';
+      const apiKey = await decryptKey(settings?.openrouter_key || '');
       const res = await safeFetch('https://openrouter.ai/api/v1/embeddings', {
         method: 'POST',
         headers: {
@@ -431,13 +432,21 @@ export function cosineSimilarity(a, b) {
  * @returns {Promise<Array>}
  */
 export async function retrieveEmbeddings(query, topK = 5, filter = {}) {
-  if (!query || !query.trim()) return [];
+  if (!query) return [];
 
   const db = await getDb();
 
   // 1. Generate query embedding
-  const queryEmbeddings = await embedTexts([query]);
-  const queryVec        = queryEmbeddings[0];
+  let queryVec;
+  if (Array.isArray(query)) {
+    queryVec = query;
+  } else {
+    if (typeof query !== 'string' || !query.trim()) return [];
+    const queryEmbeddings = await embedTexts([query]);
+    queryVec        = queryEmbeddings[0];
+  }
+
+  if (!queryVec) return [];
 
   // 2. Build optional WHERE clause (pre-filter, like Python's prefilter=True)
   let sql    = 'SELECT id, type, source_id, title, text, vector FROM embeddings';

@@ -129,7 +129,12 @@ export default function UpdateBanner() {
       }
     } else {
       // In browser mode, fallback to opening the release url directly
-      window.open(updateInfo.url, '_blank', 'noopener,noreferrer');
+      const isSafeUrl = updateInfo.url && (updateInfo.url.startsWith('https://github.com/') || updateInfo.url.startsWith('https://api.github.com/'));
+      if (isSafeUrl) {
+        window.open(updateInfo.url, '_blank', 'noopener,noreferrer');
+      } else {
+        console.error("Blocked opening unsafe redirect URL:", updateInfo.url);
+      }
       handleDismiss();
     }
   };

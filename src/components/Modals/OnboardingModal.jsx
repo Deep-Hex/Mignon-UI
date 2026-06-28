@@ -4,9 +4,11 @@ import { useSettingsContext } from '../../context/SettingsContext';
 import { useToast } from '../../context/ToastContext';
 import * as api from '../../services/api';
 import { 
-  Sun, Moon, Monitor, RefreshCw, User as UserIcon, Check, 
-  ArrowRight, ArrowLeft, Info, Cpu
+  Sun, Moon, Monitor, User as UserIcon, Check, 
+  ArrowRight, ArrowLeft, Info, Cpu, Activity, Loader2
 } from 'lucide-react';
+import Logo from '../UI/Logo';
+import { getThemeSwatches } from '../../utils/themeHelper';
 
 export default function OnboardingModal() {
   const ui = useUIContext();
@@ -83,7 +85,6 @@ export default function OnboardingModal() {
 
   const handleTestConnection = async () => {
     setIsTestingConnection(true);
-    toast.info("Testing connection...");
     try {
       // First save to the database to ensure testConnection uses the input values
       const data = await api.saveSettings(form);
@@ -195,41 +196,7 @@ export default function OnboardingModal() {
               <div className="onboarding-welcome-hero">
                 <div className="onboarding-mascot-wrapper">
                   <div className="onboarding-mascot-glow"></div>
-                  <svg viewBox="0 0 100 100" className="y2k-mascot-svg" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M 36,28 C 34,20 30,10 26,10 C 16,10 12,24 20,34 C 15,42 15,52 15,52 C 15,74 30,86 50,86 C 70,86 85,74 85,52 C 85,52 85,42 80,34 C 88,24 84,10 74,10 C 70,10 66,20 64,28 Q 50,23 36,28 Z"
-                      fill="var(--cat-fur, #ffffff)" stroke="var(--border, #1a1523)" stroke-width="3" stroke-linejoin="round"
-                      className="cat-head" />
-                    <path d="M 23,31 C 18,23 21,17 26,17 C 29,17 31,22 33,27 Z" fill="var(--pink, #ffb7d5)" />
-                    <path d="M 77,31 C 82,23 79,17 74,17 C 71,17 69,22 67,27 Z" fill="var(--pink, #ffb7d5)" />
-                    <polygon points="48,27 52,27 50,38" fill="var(--cat-stripe, #000000)" opacity="0.15" />
-                    <polygon points="41,28 45,27 44,36" fill="var(--cat-stripe, #000000)" opacity="0.15" />
-                    <polygon points="59,28 55,27 56,36" fill="var(--cat-stripe, #000000)" opacity="0.15" />
-                    <polygon points="15,48 24,50 16,52" fill="var(--cat-stripe, #000000)" opacity="0.15" />
-                    <polygon points="14,54 22,55 15,58" fill="var(--cat-stripe, #000000)" opacity="0.15" />
-                    <polygon points="16,60 21,60 17,63" fill="var(--cat-stripe, #000000)" opacity="0.15" />
-                    <polygon points="85,48 76,50 84,52" fill="var(--cat-stripe, #000000)" opacity="0.15" />
-                    <polygon points="86,54 78,55 85,58" fill="var(--cat-stripe, #000000)" opacity="0.15" />
-                    <polygon points="84,60 79,60 83,63" fill="var(--cat-stripe, #000000)" opacity="0.15" />
-                    <g className="cat-eye-left">
-                      <circle cx="36" cy="55" r="7" fill="#000000" />
-                      <circle cx="34" cy="52" r="2.5" fill="#ffffff" />
-                      <circle cx="38" cy="58" r="1" fill="#ffffff" />
-                    </g>
-                    <g className="cat-eye-right">
-                      <circle cx="64" cy="55" r="7" fill="#000000" />
-                      <circle cx="62" cy="52" r="2.5" fill="#ffffff" />
-                      <circle cx="66" cy="58" r="1" fill="#ffffff" />
-                    </g>
-                    <ellipse cx="28" cy="66" rx="5" ry="3" fill="var(--pink, #ffb7d5)" opacity="0.65" />
-                    <ellipse cx="72" cy="66" rx="5" ry="3" fill="var(--pink, #ffb7d5)" opacity="0.65" />
-                    <line x1="20" y1="62" x2="8" y2="60" stroke="#000000" stroke-width="2.5" stroke-linecap="round" />
-                    <line x1="20" y1="68" x2="6" y2="69" stroke="#000000" stroke-width="2.5" stroke-linecap="round" />
-                    <line x1="80" y1="62" x2="92" y2="60" stroke="#000000" stroke-width="2.5" stroke-linecap="round" />
-                    <line x1="80" y1="68" x2="94" y2="69" stroke="#000000" stroke-width="2.5" stroke-linecap="round" />
-                    <polygon points="50,68 46,64 54,64" fill="#000000" />
-                    <path d="M45,71 Q50,75 50,71 Q50,75 55,71" fill="none" stroke="#000000" stroke-width="3" stroke-linecap="round" />
-                  </svg>
+                  <Logo size={null} svgClassName="y2k-mascot-svg" />
                 </div>
                 <h1 className="onboarding-welcome-title">Mignon <span>UI</span></h1>
                 <p className="onboarding-welcome-desc">
@@ -275,15 +242,7 @@ export default function OnboardingModal() {
                   {ui.THEMES.map((t) => {
                     const isActive = ui.themeDesign === t.id;
                     const isDark = ui.resolvedTheme === 'dark';
-                    const swatches = {
-                      bubblegum: isDark ? ['#e54b7c', '#4ba3e3'] : ['#ffb7ce', '#a3defe'],
-                      cyberpunk: ['#ff007f', '#00f0ff'],
-                      dollhouse: isDark ? ['#ff1493', '#210035'] : ['#ff1493', '#fff0f5'],
-                      builder: isDark ? ['#f5c400', '#00852b'] : ['#d31212', '#0055a5'],
-                      classic: isDark ? ['#38bdf8', '#090d16'] : ['#2563eb', '#e2e8f0'],
-                      darkyellow: isDark ? ['#f5c400', '#080808'] : ['#f5c400', '#1a1a1c'],
-                      sketchbook: isDark ? ['#ffd700', '#18181b'] : ['#fcfaf2', '#2f3e46']
-                    }[t.id] || ['#ffb7ce', '#a3defe'];
+                    const swatches = getThemeSwatches(t.id, isDark);
 
                     return (
                       <div 
@@ -334,7 +293,11 @@ export default function OnboardingModal() {
                     disabled={isTestingConnection}
                     onClick={handleTestConnection}
                   >
-                    <RefreshCw size={14} className={isTestingConnection ? "animate-spin" : ""} />
+                    {isTestingConnection ? (
+                      <Loader2 size={14} className="animate-spin" />
+                    ) : (
+                      <Activity size={14} />
+                    )}
                     Test Connection
                   </button>
                 </div>

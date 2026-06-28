@@ -119,6 +119,7 @@ function isStickerAnchorTarget(node) {
     el.id?.startsWith('lore-item-') ||
     el.classList?.contains('modal-box') ||
     el.classList?.contains('chat-view') ||
+    el.classList?.contains('char-card') ||
     el.querySelector?.('[id^="msg-bubble-"], [id^="modal-"], .chat-view, .char-card')
   );
 }
@@ -223,7 +224,28 @@ export default function UIStickerCanvas() {
   const loadStickers = useCallback(async () => {
     try {
       const data = await api.fetchStickers();
-      setStickers(data);
+      // Auto-migrate pixel coordinates to percentages for screen-fixed stickers
+      const migrated = data.map(s => {
+        if (!s.target_selectors) {
+          let changed = false;
+          let newX = s.x;
+          let newY = s.y;
+          if (s.x > 100) {
+            newX = (s.x / window.innerWidth) * 100;
+            changed = true;
+          }
+          if (s.y > 100) {
+            newY = (s.y / window.innerHeight) * 100;
+            changed = true;
+          }
+          if (changed) {
+            api.updateSticker(s.id, { x: newX, y: newY }).catch(err => console.error(err));
+            return { ...s, x: newX, y: newY };
+          }
+        }
+        return s;
+      });
+      setStickers(migrated);
     } catch (err) {
       console.error("Failed to load UI stickers:", err);
     }
@@ -284,7 +306,10 @@ export default function UIStickerCanvas() {
         }
       } catch { /* ignore */ }
     }
-    return { x: sticker.x, y: sticker.y };
+    // Convert percentage back to pixels for screen-fixed coordinates
+    const pxX = sticker.x <= 100 ? (sticker.x / 100) * window.innerWidth : sticker.x;
+    const pxY = sticker.y <= 100 ? (sticker.y / 100) * window.innerHeight : sticker.y;
+    return { x: pxX, y: pxY };
   };
 
   // Upload new sticker image
@@ -296,12 +321,9 @@ export default function UIStickerCanvas() {
     reader.onloadend = async () => {
       const base64Data = reader.result;
 
-      const spawnX = window.innerWidth / 2;
-      const spawnY = window.innerHeight / 2;
-
-      // Newly uploaded stickers spawn as global screen-fixed stickers
-      let finalX = spawnX;
-      let finalY = spawnY;
+      // Newly uploaded stickers spawn exactly in the center of the screen (50% left, 50% top)
+      let finalX = 50;
+      let finalY = 50;
       let targetSelectorsStr = null;
 
       try {
@@ -322,6 +344,9 @@ export default function UIStickerCanvas() {
       }
     };
     reader.readAsDataURL(file);
+
+    // Reset file input value so the same image can be uploaded multiple times consecutively
+    e.target.value = "";
   };
 
   // Move Drag handlers
@@ -329,6 +354,7 @@ export default function UIStickerCanvas() {
     if (!isEditingMode) return;
 
     e.preventDefault();
+    setActiveStickerId(sticker.id); // Ensure the sticker is selected immediately on mouse down
 
     // Snaps the relative coordinates to viewport-fixed coords and mounts in body portal for seamless dragging
     const coords = getStickerScreenCoords(sticker);
@@ -368,11 +394,6 @@ export default function UIStickerCanvas() {
     info.el.style.top = `${dragY}px`;
 
     // --- REAL-TIME SCROLL-LOCK MICRO ELEMENT OVERLAP DETECTION ---
-    // Sample 9 points around the sticker bounding box. Break as soon as any
-    // point lands on an element that has a lockable ancestor — this means the
-    // lock triggers the moment any sticker edge overlaps the target, not just
-    // when the cursor reaches the center.
-    // NOTE: pointer-events: none is applied during drag, so hit-test naturally passes through.
     const stickerRectMove = {
       left: dragX - 90,
       right: dragX + 90,
@@ -460,9 +481,6 @@ export default function UIStickerCanvas() {
     const finalScreenY = parseInt(el.style.top, 10) || info.initialY;
 
     // --- LOCK TARGET EVALUATION ENGINE ---
-    // Same fixed multi-point sampling: test each point against LOCKABLE_SELECTORS
-    // directly so we break only when a lockable match is found.
-    // NOTE: pointer-events: none is applied during drag, so hit-test naturally passes through.
     const hitEl = document.elementFromPoint(e.clientX, e.clientY);
 
     const stickerRectUp = {
@@ -537,8 +555,8 @@ export default function UIStickerCanvas() {
         finalY = finalScreenY - rect.top + scrollTop;
       } else {
         // Treat as a global screen-fixed sticker
-        finalX = finalScreenX;
-        finalY = finalScreenY;
+        finalX = (finalScreenX / window.innerWidth) * 100;
+        finalY = (finalScreenY / window.innerHeight) * 100;
         targetSelectorsStr = null;
       }
     }
@@ -760,8 +778,8 @@ export default function UIStickerCanvas() {
             id={`sticker-${sticker.id}`}
             style={{
               position: isPortaledToTarget ? 'absolute' : 'fixed',
-              left: isDraggingThis ? `${dragScreenCoords.x}px` : `${sticker.x}px`,
-              top: isDraggingThis ? `${dragScreenCoords.y}px` : `${sticker.y}px`,
+              left: isDraggingThis ? `${dragScreenCoords.x}px` : (isPortaledToTarget ? `${sticker.x}px` : `${sticker.x}%`),
+              top: isDraggingThis ? `${dragScreenCoords.y}px` : (isPortaledToTarget ? `${sticker.y}px` : `${sticker.y}%`),
               transform: `translate(-50%, -50%) rotate(${sticker.rotation}deg) scale(${sticker.scale})`,
               opacity: sticker.opacity,
               cursor: isEditingMode ? 'move' : 'default',
@@ -776,10 +794,10 @@ export default function UIStickerCanvas() {
               }
             }}
           >
-            {/* Sticker Image Decal */}
+            {/* Sticker Image */}
             <img
               src={sticker.image_data}
-              alt="UI Decal"
+              alt="UI Sticker"
               style={{
                 maxHeight: '180px',
                 maxWidth: '180px',

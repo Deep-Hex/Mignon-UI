@@ -18,12 +18,14 @@
     --text-tab-active: var(--text);
     --bg-card-hover: var(--bg-input);
     --bg-card-active: var(--bg-input);
+    --bg-card: var(--bg-window);
 
     --border: #000000;
     --border-width: 2px;
     --shadow-color: #000000;
     --shadow-sm: 2px 2px 0px var(--shadow-color);
     --shadow-md: 4px 4px 0px var(--shadow-color);
+    --shadow-lg: 8px 8px 0px var(--shadow-color);
 
     --pink: #ffb7ce;
     --blue: #a3defe;
@@ -56,12 +58,14 @@
     --text-tab-active: var(--pink);
     --bg-card-hover: var(--bg-input);
     --bg-card-active: var(--bg-input);
+    --bg-card: var(--bg-window);
 
     --border: #4a2d6e;           /* Visible deep violet border on obsidian bg */
     --border-width: 2px;
     --shadow-color: #2a0f3d;     /* Deep violet shadow */
     --shadow-sm: 2px 2px 0px var(--shadow-color);
     --shadow-md: 4px 4px 0px var(--shadow-color);
+    --shadow-lg: 8px 8px 0px var(--shadow-color);
 
     --pink: #e54b7c;             /* Rich Cyber Raspberry rose */
     --blue: #4ba3e3;             /* Rich Cornflower sky blue */

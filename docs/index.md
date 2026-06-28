@@ -8,10 +8,10 @@ This project is engineered to provide fully private, uncensored, and deeply imme
 
 ## 🎨 Core Sandbox Pillars
 
-1. **Absolute Privacy**: Zero cloud or server-side API requirements for core services, completely local SQLite database persistence, and CPU-bound serverless vector indexing.
-2. **Infinite Horizon memory**: Distills chronological transcripts into structured narrative chapters (the "Chronicle Memory Book") coupled with low-overhead hybrid vector lookup.
+1. **Privacy & Offline-First**: Zero cloud requirements by default, completely local SQLite database persistence, and serverless vector indexing.
+2. **Smart Long-Term Memory**: Distills chronological transcripts into structured narrative chapters (the "Smart Memory Book") coupled with low-overhead hybrid vector lookup.
 3. **Immersive Multi-Bot Lobbies**: Shared sandbox rooms supporting multiple active AI personalities coordinating turns naturally using mathematical proactivity and spatial proximity score calculations.
-4. **Draggable Decals Overlay**: Absolute-positioned pointer/touch sticker overlay engine with automatic snapping coordinates anchoring items directly to custom container elements.
+4. **[EXPERIMENTAL] Snapping Decals Canvas**: Absolute-positioned pointer/touch sticker overlay engine with automatic snapping coordinates anchoring items directly to custom container elements.
 5. **Harmonious Style Swapping**: Vanilla CSS neobrutalist and Y2K pop themes built on top of customized root variables, swap layouts, fonts, grids, and shadows instantly.
 
 ---
@@ -25,9 +25,9 @@ graph TD
     %% Node Definitions
     Index[index.md: Document Portal] --> Setup[setup.md: Launch & Build Guide]
     Index --> Arch[architecture.md: Schema & Data Flows]
-    Index --> Memory[memory.md: Chronicle Memory & RAG]
+    Index --> Memory[memory.md: Smart Memory & RAG]
     Index --> Group[group_chat.md: Turn-Taking & Scene Boards]
-    Index --> Stickers[stickers.md: Decals Canvas overlay]
+    Index --> Stickers[stickers.md: Experimental Decals Canvas]
     Index --> Design[design_system.md: Themes & CSS design system]
     Index --> Opt[optimization.md: 6GB Hardware Tuning Guide]
     
@@ -57,7 +57,7 @@ graph TD
 * **What's Covered**: Serverless client-side architecture (Tauri v2 + Vite/React), Tauri native plugins (`@tauri-apps/plugin-sql` and `@tauri-apps/plugin-http`), local SQLite schema, and secure hex-encrypted credential storage.
 * **Best For**: Understanding the relational schema mapping, cascading database constraints, and vector coordinate arrays.
 
-### 🧠 [3. Semantic RAG & Chronicle Memory (memory.md)](memory.md)
+### 🧠 [3. Semantic RAG & Smart Memory (memory.md)](memory.md)
 * **What's Covered**: Asynchronous milestone summaries compilation, multi-tiered embedding pipeline (OpenRouter, local API offload, browser-worker WASM Jina v2 fallback), client-side JS cosine similarity RAG, and prompt prefix KV cache layouts.
 * **Best For**: Configuring long-term character memories and squeezing fast evaluation speeds (<150ms) out of massive contexts.
 
@@ -65,12 +65,12 @@ graph TD
 * **What's Covered**: Sociolinguistic turn-taking models, complete **Turn Eagerness Score (TES)** formulas, physical incapacitation room filters, and shared Environment Scene Status board coordinates.
 * **Best For**: Customizing active room scenes and controlling the conversational pacing of bot-to-bot interactions.
 
-### 🖼️ [5. Snapping Decals Overlay (stickers.md)](stickers.md)
+### 🖼️ [5. [EXPERIMENTAL] Snapping Decals Canvas (stickers.md)](stickers.md)
 * **What's Covered**: Pointer gesture transformation matrices (scale, rotation, transparency limits), snapping boundaries algorithms, and client-side database synchronization via the JS API broker.
 * **Best For**: Customizing the interactive sticker canvas overlay layer.
-
+ 
 ### 🎨 [6. Design Tokens & Premium Themes (design_system.md)](design_system.md)
-* **What's Covered**: Neobrutalist design tokens CSS architectures, dynamic HSL variable injections, and breakdowns of all 7 premium themes (Bubblegum, Cyberpunk, Cozy Slate, Parchment, amber Matrix, custom Builder, Hand-Drawn Sketch Book).
+* **What's Covered**: Neobrutalist design tokens CSS architectures, dynamic HSL variable injections, and breakdowns of all 7 premium themes (Bubblegum Pop, Neo-Cyber, Dollhouse, Builder, Mignon UI Classic, Dark Yellow, and Sketch Book).
 * **Best For**: Styling custom UI additions or coding your own custom HSL color-presets layout overrides.
 
 ### ⚡ [7. 6GB VRAM Laptop Tuning Guide (optimization.md)](optimization.md)

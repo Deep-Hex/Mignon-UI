@@ -20,6 +20,7 @@
     --text-tab-active: #ffffff;
     --bg-card-hover: #fff9fb;
     --bg-card-active: #ffe4e1;
+    --bg-card: var(--bg-window);
 
     /* Dollhouse bot accents - Dreamhouse Party Tones (Light Mode) */
     --accent-cyan-bg: #bdf2ff;      /* Malibu Turquoise */
@@ -39,6 +40,7 @@
     --shadow-color: #ffc0cb;     /* Soft bubblegum shadow */
     --shadow-sm: 0 2px 8px var(--shadow-color);
     --shadow-md: 0 10px 30px var(--shadow-color);
+    --shadow-lg: 0 15px 40px var(--shadow-color);
 
     --pink: #ff1493;             /* Hot Dollhouse Pink */
     --blue: #33ccff;             /* Malibu Turquoise Blue */
@@ -76,6 +78,7 @@
     --text-tab-active: #ff1493;
     --bg-card-hover: #f0e6ff;
     --bg-card-active: #ebd9ff;
+    --bg-card: var(--bg-window);
 
     /* Dollhouse bot accents - Dreamhouse Party Tones (Dark Mode) */
     --accent-cyan-bg: #bdf2ff;      /* Malibu Turquoise */
@@ -95,6 +98,7 @@
     --shadow-color: #ffc0cb;     /* Soft bubblegum shadow */
     --shadow-sm: 0 0 6px rgba(255, 20, 147, 0.4), 0 2px 8px rgba(0, 0, 0, 0.6);
     --shadow-md: 0 0 18px rgba(255, 20, 147, 0.3), 0 10px 30px rgba(0, 0, 0, 0.7);
+    --shadow-lg: 0 0 24px rgba(255, 20, 147, 0.4), 0 15px 40px rgba(0, 0, 0, 0.7);
 
     --pink: #ff1493;
     --blue: #33ccff;

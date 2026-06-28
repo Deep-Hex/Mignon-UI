@@ -17,7 +17,9 @@ const MessageBubble = React.memo(({
   setCurrentRoomId,
   loadRoomMessages,
   showConfirm,
-  toast
+  toast,
+  isFirstInGroup = true,
+  isLastInGroup = true
 }) => {
   const isUser = m.sender_type === 'user';
   const avatarUrl = isUser ? null : getBotAvatarUrl(m.character_id, activeRoomBots);
@@ -151,112 +153,90 @@ const MessageBubble = React.memo(({
   const transparentBtnStyle = { background: 'transparent', border: 'none', padding: '4px', cursor: 'pointer', color: 'inherit', opacity: 0.7 };
 
   return (
-    <div className={`msg-bubble-wrapper ${isUser ? 'user animate-fade-in' : 'bot'}`}>
+    <div className={`msg-bubble-wrapper ${isUser ? 'user animate-fade-in' : 'bot'}${!isFirstInGroup ? ' is-consecutive' : ''}`}>
       {!isUser && (
-        <div className={`char-avatar ${accentClass}`} style={{ width: '40px', height: '40px', marginTop: '4px' }}>
+        <div className={`char-avatar ${accentClass}`} style={{ width: '40px', height: '40px', marginTop: '4px', visibility: isLastInGroup ? 'visible' : 'hidden' }}>
           {avatarUrl ? <img src={avatarUrl} alt={m.sender_name} loading="lazy" /> : <UserIcon />}
         </div>
       )}
-      <div>
-        <div
-          className={`msg-bubble ${accentClass}${isEditing ? ' is-editing' : ''}`}
-          id={`msg-bubble-${m.id}`}
-          style={{ paddingBottom: isEditing ? '12px' : '32px', position: 'relative' }}
-        >
-          <div className={`msg-sender-name ${botColor}`}>{m.sender_name}</div>
-
-          {/* Inline pencil edit button for last message — appears on hover */}
-          {isLast && !isEditing && !m.is_streaming && swipeRegenMsgId !== m.id && (
-            <button
-              className="msg-inline-edit-btn"
-              title="Edit message (Ctrl+Enter to save, Esc to cancel)"
-              onClick={() => setIsEditing(true)}
-            >
-              <Pencil size={12} />
-            </button>
-          )}
-
-          <div className="msg-body-content">
-            {isEditing ? (
-              <>
-                <textarea
-                  ref={textareaRef}
-                  className="msg-inline-textarea scrollbar-custom"
-                  value={editContent}
-                  onChange={(e) => { setEditContent(e.target.value); autoGrow(); }}
-                  onKeyDown={handleEditKeyDown}
-                  placeholder="Edit message..."
-                  rows={1}
-                />
-                <div className="msg-inline-edit-actions">
-                  <span className="msg-edit-hint">Ctrl+Enter to save · Esc to cancel</span>
-                  <div style={{ display: 'flex', gap: '6px' }}>
-                    <button className="msg-inline-btn cancel" onClick={handleCancelEdit} title="Cancel">
-                      <XIcon size={12} /> Cancel
-                    </button>
-                    <button className="msg-inline-btn save" onClick={handleSaveEdit} title="Save">
-                      <Check size={12} /> Save
-                    </button>
+      <div className="msg-bubble-container">
+        {isFirstInGroup && (activeRoomBots.length > 1) && <div className={`msg-sender-name ${botColor}`}>{m.sender_name}</div>}
+        <div className="msg-bubble-row" style={{ display: 'flex', gap: '8px', alignItems: 'center', flexDirection: isUser ? 'row-reverse' : 'row' }}>
+          <div
+            className={`msg-bubble ${accentClass}${isFirstInGroup && !isLastInGroup ? ' is-group-first' : ''}${!isFirstInGroup && !isLastInGroup ? ' is-group-middle' : ''}${!isFirstInGroup && isLastInGroup ? ' is-group-last' : ''}${isEditing ? ' is-editing' : ''}`}
+            id={`msg-bubble-${m.id}`}
+            style={{ position: 'relative' }}
+          >
+            <div className="msg-body-content">
+              {isEditing ? (
+                <>
+                  <textarea
+                    ref={textareaRef}
+                    className="msg-inline-textarea scrollbar-custom"
+                    value={editContent}
+                    onChange={(e) => { setEditContent(e.target.value); autoGrow(); }}
+                    onKeyDown={handleEditKeyDown}
+                    placeholder="Edit message..."
+                    rows={1}
+                  />
+                  <div className="msg-inline-edit-actions">
+                    <span className="msg-edit-hint">Ctrl+Enter to save · Esc to cancel</span>
+                    <div style={{ display: 'flex', gap: '6px' }}>
+                      <button className="msg-inline-btn cancel" onClick={handleCancelEdit} title="Cancel">
+                        <XIcon size={12} /> Cancel
+                      </button>
+                      <button className="msg-inline-btn save" onClick={handleSaveEdit} title="Save">
+                        <Check size={12} /> Save
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </>
-            ) : (
-              (m.is_streaming || swipeRegenMsgId === m.id) && !m.content ? (
-                <div className="typing-indicator" style={{ border: 'none', background: 'transparent', padding: '4px 0', boxShadow: 'none', display: 'inline-flex', verticalAlign: 'middle' }}>
-                  <span className="typing-dot" />
-                  <span className="typing-dot" />
-                  <span className="typing-dot" />
-                </div>
+                </>
               ) : (
-                // fallow-ignore-next-line security-sink
-                <div dangerouslySetInnerHTML={{ __html: formatRoleplayText(m.content) }} />
-              )
+                (m.is_streaming || swipeRegenMsgId === m.id) && !m.content ? (
+                  <div className="typing-indicator" style={{ border: 'none', background: 'transparent', padding: '4px 0', boxShadow: 'none', display: 'inline-flex', verticalAlign: 'middle' }}>
+                    <span className="typing-dot" />
+                    <span className="typing-dot" />
+                    <span className="typing-dot" />
+                  </div>
+                ) : (
+                  // fallow-ignore-next-line security-sink
+                  <div dangerouslySetInnerHTML={{ __html: formatRoleplayText(m.content) }} />
+                )
+              )}
+            </div>
+
+            {/* Inline swipe controls in document flow if sweeps exist */}
+            {swipeRegenMsgId !== m.id && !isEditing && hasSwipes && (
+              <div className="swipe-controls" style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                marginTop: '10px'
+              }}>
+                <button
+                  className="swipe-arrow prev-swipe"
+                  onClick={() => onSwipeMessage(m.id, m.active_swipe_index - 1, m.swipes.length)}
+                  disabled={m.active_swipe_index === 0 || isGenerating}
+                  style={transparentBtnStyle}
+                >
+                  <ChevronLeft style={{ width: '14px', height: '14px' }} />
+                </button>
+                <span style={{ fontSize: '0.85rem', opacity: 0.7 }}>{m.active_swipe_index + 1}/{m.swipes.length}</span>
+                <button
+                  className="swipe-arrow next-swipe"
+                  onClick={() => onSwipeMessage(m.id, m.active_swipe_index + 1, m.swipes.length)}
+                  disabled={m.active_swipe_index === m.swipes.length - 1 || isGenerating}
+                  style={transparentBtnStyle}
+                >
+                  <ChevronRight style={{ width: '14px', height: '14px' }} />
+                </button>
+              </div>
             )}
           </div>
 
-          {swipeRegenMsgId !== m.id && !isEditing && (
-            <div className="swipe-controls" style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              position: 'absolute',
-              bottom: '6px',
-              left: '16px',
-              marginTop: 0
-            }}>
-              {hasSwipes && (
-                <>
-                  <button
-                    className="swipe-arrow prev-swipe"
-                    onClick={() => onSwipeMessage(m.id, m.active_swipe_index - 1, m.swipes.length)}
-                    disabled={m.active_swipe_index === 0 || isGenerating}
-                    style={transparentBtnStyle}
-                  >
-                    <ChevronLeft style={{ width: '14px', height: '14px' }} />
-                  </button>
-                  <span style={{ fontSize: '0.85rem', opacity: 0.7 }}>{m.active_swipe_index + 1}/{m.swipes.length}</span>
-                  <button
-                    className="swipe-arrow next-swipe"
-                    onClick={() => onSwipeMessage(m.id, m.active_swipe_index + 1, m.swipes.length)}
-                    disabled={m.active_swipe_index === m.swipes.length - 1 || isGenerating}
-                    style={transparentBtnStyle}
-                  >
-                    <ChevronRight style={{ width: '14px', height: '14px' }} />
-                  </button>
-                </>
-              )}
-            </div>
-          )}
-
+          {/* Action buttons rendered outside bubble on hover */}
           {swipeRegenMsgId !== m.id && !m.is_streaming && !isEditing && (
-            <div className="msg-actions" style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              position: 'absolute',
-              bottom: '6px',
-              right: '16px'
-            }}>
+            <div className="msg-actions">
               {showRegen && (
                 <button
                   title="Swipe/Regenerate Response"
@@ -264,6 +244,16 @@ const MessageBubble = React.memo(({
                   style={transparentBtnStyle}
                 >
                   <RefreshCw style={{ width: '15px', height: '15px' }} />
+                </button>
+              )}
+
+              {isLast && (
+                <button
+                  title="Edit Message"
+                  onClick={() => setIsEditing(true)}
+                  style={transparentBtnStyle}
+                >
+                  <Pencil style={{ width: '15px', height: '15px' }} />
                 </button>
               )}
 
@@ -275,7 +265,7 @@ const MessageBubble = React.memo(({
                 <Trash2 style={{ width: '15px', height: '15px' }} />
               </button>
 
-              <div ref={menuRef} style={{ display: 'flex' }}>
+              <div ref={menuRef} style={{ display: 'flex', position: 'relative' }}>
                 <button
                   title="More Options"
                   onClick={() => setShowMenu(!showMenu)}
@@ -303,7 +293,7 @@ const MessageBubble = React.memo(({
         </div>
       </div>
       {isUser && (
-        <div className="char-avatar" style={{ width: '40px', height: '40px', marginTop: '4px', flexShrink: 0 }}>
+        <div className="char-avatar" style={{ width: '40px', height: '40px', marginTop: '4px', flexShrink: 0, visibility: isLastInGroup ? 'visible' : 'hidden' }}>
           <UserIcon />
         </div>
       )}

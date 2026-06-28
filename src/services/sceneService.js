@@ -67,37 +67,7 @@ export async function runCognitiveAuction(roomId, messageContent, eligibleBots, 
   return fallbackWinnerId;
 }
 
-export function cleanLlmJson(text) {
-  if (!text) return "";
-
-  // 1. XML tag extraction
-  const tagMatch = text.match(/<bids_json>\s*([\s\S]*?)\s*<\/bids_json>/i);
-  if (tagMatch) {
-    const content = tagMatch[1].trim();
-    const mdMatch = content.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
-    if (mdMatch) {
-      return mdMatch[1].trim();
-    }
-    return content;
-  }
-
-  // 2. Markdown wrapper
-  const mdMatch = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
-  if (mdMatch) {
-    return mdMatch[1].trim();
-  }
-
-  // 3. Curly braces
-  const start = text.indexOf("{");
-  const end = text.lastIndexOf("}");
-  if (start !== -1 && end !== -1) {
-    return text.slice(start, end + 1).trim();
-  }
-
-  return text.trim();
-}
-
-export function extractPhysicalAction(replyContent) {
+function extractPhysicalAction(replyContent) {
   if (!replyContent) return "";
   
   // Match single asterisks
@@ -114,7 +84,7 @@ export function extractPhysicalAction(replyContent) {
   return cleanedActions.join(", ");
 }
 
-export function detectLocationChange(action) {
+function detectLocationChange(action) {
   if (!action) return null;
   const actionClean = action.trim();
 
@@ -145,7 +115,7 @@ export function detectLocationChange(action) {
   return null;
 }
 
-export function detectMoodChange(text) {
+function detectMoodChange(text) {
   if (!text) return null;
   const textLower = text.toLowerCase();
 

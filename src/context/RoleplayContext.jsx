@@ -13,7 +13,7 @@
 import { ToastProvider } from './ToastContext';
 import { UIProvider } from './UIContext';
 import { SettingsProvider } from './SettingsContext';
-import { LoreWorldProvider } from './LoreWorldContext';
+import { LoreBookProvider } from './LoreBookContext';
 import { CharacterProvider } from './CharacterContext';
 import { ChatProvider } from './ChatContext';
 
@@ -22,13 +22,13 @@ export function RoleplayProvider({ children }) {
     <ToastProvider>
       <UIProvider>
         <SettingsProvider>
-          <LoreWorldProvider>
+          <LoreBookProvider>
             <CharacterProvider>
               <ChatProvider>
                 {children}
               </ChatProvider>
             </CharacterProvider>
-          </LoreWorldProvider>
+          </LoreBookProvider>
         </SettingsProvider>
       </UIProvider>
     </ToastProvider>

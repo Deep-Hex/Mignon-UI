@@ -8,6 +8,8 @@ import { APP_NAME } from '../config';
 
 // Secure key helpers calling Tauri Rust commands
 export async function encryptKey(plaintext) {
+  const isTauri = typeof window !== 'undefined' && (!!window.__TAURI_IPC__ || !!window.__TAURI_INTERNALS__);
+  if (!isTauri) return plaintext;
   try {
     return await invoke('encrypt_key', { plaintext });
   } catch (e) {
@@ -17,6 +19,16 @@ export async function encryptKey(plaintext) {
 }
 
 export async function decryptKey(encryptedStr) {
+  if (!encryptedStr) return "";
+  // If the value is not encrypted (legacy plaintext or test values), return as-is
+  if (!encryptedStr.startsWith("enc::")) return encryptedStr;
+
+  const isTauri = typeof window !== 'undefined' && (!!window.__TAURI_IPC__ || !!window.__TAURI_INTERNALS__);
+  if (!isTauri) {
+    console.warn("[LLM Client] Cannot decrypt key starting with 'enc::' in browser mode. Please re-enter your API key in Settings.");
+    return "";
+  }
+
   try {
     return await invoke('decrypt_key', { encryptedStr });
   } catch (e) {
@@ -35,7 +47,7 @@ async function resolveLlmEndpoint(settings) {
     url = "https://openrouter.ai/api/v1/chat/completions";
     const apiKey = await decryptKey(settings.openrouter_key);
     headers["Authorization"] = `Bearer ${apiKey}`;
-    headers["HTTP-Referer"] = `https://github.com/Deep-Hex/${APP_NAME.replace(/\s+/g, '-')}`;
+    headers["HTTP-Referer"] = `https://github.com/Deep-Hex/Mignon-UI`;
     headers["X-Title"] = APP_NAME;
   } else if (settings?.provider === "custom" && settings?.custom_key) {
     const apiKey = await decryptKey(settings.custom_key);

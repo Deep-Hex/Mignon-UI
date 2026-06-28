@@ -2,7 +2,7 @@
   "name": "mignon-ui",
   "private": true,
   "license": "AGPL-3.0-only",
-  "version": "1.0.0-beta",
+  "version": "1.0.1-beta",
   "type": "module",
   "scripts": {
     "start": "tauri dev",
@@ -14,15 +14,21 @@
     "tauri:android:dev": "tauri android dev",
     "tauri:android:build": "tauri android build",
     "lint": "eslint .",
-    "test": "vitest run",
-    "test:watch": "vitest",
+    "test": "vitest run --pool=threads",
+    "test:watch": "vitest --pool=threads",
     "preview": "tauri preview"
   },
   "dependencies": {
     "@huggingface/transformers": "^4.2.0",
+    "@tauri-apps/plugin-dialog": "^2.7.1",
+    "@tauri-apps/plugin-fs": "^2.5.1",
     "@tauri-apps/plugin-http": "^2.5.9",
     "@tauri-apps/plugin-sql": "^2.4.0",
+    "buffer": "^6.0.3",
     "lucide-react": "^1.17.0",
+    "png-chunk-text": "^1.0.0",
+    "png-chunks-encode": "^1.0.0",
+    "png-chunks-extract": "^1.0.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6"
   },
@@ -44,7 +50,7 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
     "jsdom": "^29.1.1",
-    "vite": "^8.0.12",
+    "vite": "^8.1.0",
     "vitest": "^4.1.8"
   }
 }

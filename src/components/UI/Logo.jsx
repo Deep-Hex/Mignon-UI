@@ -1,11 +1,12 @@
-import './DarfLogo.css';
+import './Logo.css';
 
-export default function DarfLogo({ size = 48, className = '' }) {
+export default function Logo({ size = 48, className = '', svgClassName = 'logo-svg' }) {
+  const containerStyle = size ? { width: size, height: size } : {};
   return (
-    <div className={`darf-logo-wrapper ${className}`} style={{ width: size, height: size }}>
+    <div className={`logo-wrapper ${className}`} style={containerStyle}>
       <svg
         viewBox="0 0 100 100"
-        className="darf-logo-svg"
+        className={svgClassName}
         xmlns="http://www.w3.org/2000/svg"
       >
         {/* Unified Feline Silhouette (Head + Ears in a single path) */}
@@ -30,12 +31,12 @@ export default function DarfLogo({ size = 48, className = '' }) {
           fill="var(--pink)"
         />
 
-        {/* Forehead Tabby Stripes (from Reference Image) */}
+        {/* Forehead Tabby Stripes */}
         <polygon points="48,27 52,27 50,38" fill="#000000" opacity="0.15" />
         <polygon points="41,28 45,27 44,36" fill="#000000" opacity="0.15" />
         <polygon points="59,28 55,27 56,36" fill="#000000" opacity="0.15" />
 
-        {/* Cheek Tabby Stripes (from Reference Image) */}
+        {/* Cheek Tabby Stripes */}
         <polygon points="15,48 24,50 16,52" fill="#000000" opacity="0.15" />
         <polygon points="14,54 22,55 15,58" fill="#000000" opacity="0.15" />
         <polygon points="16,60 21,60 17,63" fill="#000000" opacity="0.15" />
@@ -43,8 +44,6 @@ export default function DarfLogo({ size = 48, className = '' }) {
         <polygon points="85,48 76,50 84,52" fill="#000000" opacity="0.15" />
         <polygon points="86,54 78,55 85,58" fill="#000000" opacity="0.15" />
         <polygon points="84,60 79,60 83,63" fill="#000000" opacity="0.15" />
-
-
 
         {/* Left Eye */}
         <g className="cat-eye-left">

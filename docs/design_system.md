@@ -57,54 +57,55 @@ Mignon UI ships with seven pre-configured design themes. Changing themes overrid
 graph TD
     %% Node Structure
     Root[Active CSS Class Injection]
-    Root --> Bubblegum[1. Bubblegum: Neobrutalist Y2K Pop]
+    Root --> Bubblegum[1. Bubblegum Pop: Neobrutalist Y2K Pop]
     Root --> Cyber[2. Neo-Cyber: Dark Synthwave Grid]
-    Root --> Dollhouse[3. Cozy Dollhouse: Lavender Pastel Slate]
-    Root --> Classic[4. Classic Parchment: Vintage RPG Scroll]
-    Root --> Matrix[5. Amber Matrix: Retro CRT Terminal]
-    Root --> Builder[6. Theme Builder: Custom HSL Developer Sliders]
+    Root --> Dollhouse[3. Dollhouse: Glam Pink Malibu Dreamhouse]
+    Root --> Builder[4. Builder: Custom HSL Developer Sliders]
+    Root --> Classic[5. Mignon UI Classic: Professional Flat Zinc & Slate]
+    Root --> DarkYellow[6. Dark Yellow: Gritty Brutalist Gold & Steel]
     Root --> Sketch[7. Sketch Book: Pencil & Chalk Ruled Notebook]
     
     %% Styles
     style Root fill:#d4af37,stroke:#000,stroke-width:1.5px,color:#000
     style Bubblegum fill:#ffb7ce,stroke:#000,stroke-width:1.5px,color:#000
     style Cyber fill:#00f0ff,stroke:#000,stroke-width:1.5px,color:#000
-    style Dollhouse fill:#dcd0ff,stroke:#000,stroke-width:1.5px,color:#000
-    style Classic fill:#eed9b3,stroke:#000,stroke-width:1.5px,color:#000
-    style Matrix fill:#ffb000,stroke:#000,stroke-width:1.5px,color:#000
+    style Dollhouse fill:#ff1493,stroke:#000,stroke-width:1.5px,color:#fff
     style Builder fill:#a3e635,stroke:#000,stroke-width:1.5px,color:#000
+    style Classic fill:#f1f5f9,stroke:#000,stroke-width:1.5px,color:#000
+    style DarkYellow fill:#f5c400,stroke:#000,stroke-width:1.5px,color:#000
     style Sketch fill:#fcf8f2,stroke:#000,stroke-width:1.5px,color:#000
 ```
 
 ### 1. Bubblegum Pop (Default Theme)
 * **Aesthetic**: Neobrutalist Y2K Pop. Bright, pastel colors, thick pitch-black borders, and hard shadow blocks.
 * **Fonts**: `Fredoka` & `Plus Jakarta Sans`.
+* **Source**: [bubblegum.css](../src/styles/themes/bubblegum.css).
 
 ### 2. Neo-Cyber (Cyberpunk)
 * **Aesthetic**: Dark synthwave grid with glowing cyan borders (`#00f0ff`) and hot pink shadows (`#ff007f`). Features real-time CRT scanlines and custom rectangular equalizer typing indicators.
 * **Fonts**: `Orbitron` (Tech monospace).
 * **Source**: [cyberpunk.css](../src/styles/themes/cyberpunk.css).
 
-### 3. Cozy Dollhouse
-* **Aesthetic**: Soft violet hues, rounded curves, and cozy pastel buttons. Designed to look clean, comfortable, and highly readable.
-* **Fonts**: `Fredoka` (Soft sans-serif).
+### 3. Dollhouse
+* **Aesthetic**: Glamorous pink Malibu dreamhouse style with sweet pink/bubblegum hues, hot pink borders, and cursive typography.
+* **Fonts**: `Pacifico` (Malibu cursive headings) & `Plus Jakarta Sans` (body).
 * **Source**: [dollhouse.css](../src/styles/themes/dollhouse.css).
 
-### 4. Classic Parchment (Vintage RPG)
-* **Aesthetic**: Aged vintage scroll design with textured sepia grids, italicized typewriter fonts, and retro borders. Perfect for fantasy text-adventures.
-* **Fonts**: `Courier New` / Monospace.
-* **Source**: [classic.css](../src/styles/themes/classic.css).
-
-### 5. Dark Yellow Matrix
-* **Aesthetic**: Old-school monochrome amber CRT screen terminal vibes. Sharp contrast yellow-green text on deep black backdrops.
-* **Fonts**: `Bebas Neue` & Monospace.
-* **Source**: [darkyellow.css](../src/styles/themes/darkyellow.css).
-
-### 6. Interactive Theme Builder
+### 4. Builder (Theme Builder)
 * **Aesthetic**: Custom developer template that exposes sliders and colorpickers in the Settings modal, allowing players to generate, build, and save their own custom token parameters on the fly.
 * **Source**: [builder.css](../src/styles/themes/builder.css).
 
-### 7. Hand-Drawn Sketch Book
+### 5. Mignon UI Classic
+* **Aesthetic**: Crisp, professional clean SaaS / Flat Zinc & Slate interface with subtle slate grids and sleek, elegant 1px borders.
+* **Fonts**: `Inter` (Sleek corporate sans-serif).
+* **Source**: [classic.css](../src/styles/themes/classic.css).
+
+### 6. Dark Yellow
+* **Aesthetic**: Gritty brutalist gold and steel theme with rain-slicked concrete textures and high-contrast signal yellow accents.
+* **Fonts**: `Bebas Neue` & Monospace.
+* **Source**: [darkyellow.css](../src/styles/themes/darkyellow.css).
+
+### 7. Sketch Book
 * **Aesthetic**: Warm Ivory parchment journal paper styled with soft blue academic ruled lines, a pink vertical margin, graphite-pencil shaded bubbles, and asymmetrical hand-drawn borders (Light). Deep slate classroom chalkboard textured with glowing chalky white and neon yellow accents (Dark).
 * **Fonts**: `Architects Daughter` (Headings/Labels) & `Caveat` (Dialogue text).
 * **Source**: [sketchbook.css](../src/styles/themes/sketchbook.css).

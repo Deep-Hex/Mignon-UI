@@ -6,29 +6,41 @@
     display: none;
     align-items: center;
     justify-content: center;
-    z-index: 999
+    z-index: 999;
 }
 
 .modal-backdrop.active {
-    display: flex
+    display: flex;
 }
 
-.modal-box {
-    width: 100%;
-    max-width: 600px;
+.modal-box,
+.confirm-box {
     background: var(--bg-window);
     border: var(--border-width) solid var(--border);
     border-radius: var(--r-md);
     display: flex;
     flex-direction: column;
-    max-height: 90vh;
     box-shadow: var(--shadow-md);
+}
+
+.modal-box {
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
     overflow: hidden;
 }
 
+.confirm-box {
+    width: 90%;
+    max-width: 400px;
+    padding: 24px;
+    gap: 20px;
+    animation: confirmPopIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
 .glassmorphism {
-  /* 1. Translucent Deep Background (Dark Obsidian) */
-  background: rgba(18, 18, 18, 0.75);
+  /* 1. Translucent Deep Background (Matches Theme Window Color) */
+  background: color-mix(in srgb, var(--bg-window) 75%, transparent);
   
   /* 2. The Frosted Glass Secret Sauce (Blur + Saturation Boost) */
   backdrop-filter: blur(12px) saturate(180%);
@@ -87,7 +99,7 @@
 
 .modal-close-btn i {
     width: 18px;
-    height: 18px
+    height: 18px;
 }
 
 .modal-body {
@@ -119,19 +131,6 @@
     animation: confirmFadeIn 0.2s ease-out;
 }
 
-.confirm-box {
-    width: 90%;
-    max-width: 400px;
-    background: var(--bg-window);
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--r-md);
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    box-shadow: var(--shadow-md);
-    animation: confirmPopIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
 
 .confirm-message {
     font-family: var(--font-body);
@@ -172,5 +171,41 @@
     to {
         opacity: 1;
     }
+}
+
+/* Custom Refactoring - Remove optional fields button styling */
+.remove-optional-field-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: color var(--tf);
+    padding: 4px;
+    margin-right: -4px;
+}
+
+.remove-optional-field-btn:hover {
+    color: var(--pink) !important;
+}
+
+/* Custom Refactoring - Export dropdown button styling */
+.world-select-popover button.export-dropdown-btn {
+    background: none;
+    color: var(--text);
+    border: none;
+    padding: 6px 8px;
+    border-radius: var(--r-xs);
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.78rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.world-select-popover button.export-dropdown-btn:hover {
+    background: var(--bg-card-hover) !important;
 }
 

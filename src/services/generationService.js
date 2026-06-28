@@ -12,7 +12,7 @@ import { checkAndGenerateSummary } from './memorySummarizer';
 const cloudRateLimits = {};
 const LIMIT_WINDOW = 60.0; // seconds
 
-export async function checkCloudRateLimit(roomId) {
+async function checkCloudRateLimit(roomId) {
   const settings = await getSettings();
   if (!settings) return;
 

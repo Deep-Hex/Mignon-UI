@@ -202,3 +202,15 @@ export function extractAvatarUrlFromPngBytes(arrayBuffer) {
     return null;
   }
 }
+
+// Parses a raw Tavern card JSON object (v1/v2/v3) into the internal character schema.
+// Used for .json file imports where there is no PNG container to read.
+export function parseTavernJson(rawJson) {
+  try {
+    return mapCharaJsonToSchema(rawJson);
+  } catch (err) {
+    console.error("[TavernParser] Error parsing JSON card:", err);
+    return null;
+  }
+}
+

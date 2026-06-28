@@ -40,6 +40,10 @@ export async function deleteRoom(id) {
   return crud.deleteRoom(id);
 }
 
+export async function updateRoom(id, updates) {
+  return crud.updateRoom(id, updates);
+}
+
 export async function fetchRoomMemories(roomId) {
   const dbInst = await getDb();
   return dbInst.select("SELECT * FROM chat_summaries WHERE room_id = ? ORDER BY id ASC", [roomId]);
@@ -68,19 +72,6 @@ export async function sendMessage(roomId, content, senderName = "User") {
     console.warn("[RoomService] User scene state update warning:", exScene);
   }
 
-  return true;
-}
-
-export async function sendBotGreeting(roomId, characterId, characterName, greeting) {
-  await crud.createMessage({
-    room_id: roomId,
-    sender_type: "character",
-    character_id: characterId,
-    sender_name: characterName,
-    content: greeting,
-    swipes: [greeting],
-    active_swipe_index: 0
-  });
   return true;
 }
 

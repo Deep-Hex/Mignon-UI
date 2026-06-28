@@ -75,10 +75,10 @@ export {
   fetchRooms,
   createRoom,
   deleteRoom,
+  updateRoom,
   fetchRoomMemories,
   fetchRoomMessages,
   sendMessage,
-  sendBotGreeting,
   swipeMessage,
   deleteMessage,
   updateMessage,
@@ -90,7 +90,7 @@ export {
 } from './roomService';
 
 // ── Worlds & Lore ──
-export { fetchWorlds, createWorld, deleteWorld, fetchLore, saveLore, deleteLore } from './worldService';
+export { fetchWorlds, createWorld, deleteWorld, updateWorld, fetchLore, saveLore, deleteLore, importWorldInfo as importWorld } from './loreService';
 
 // ── Stickers ──
 export async function fetchStickers() {
@@ -110,4 +110,4 @@ export async function deleteSticker(id) {
 }
 
 // ── LLM Generation & Swipe Regeneration ──
-export { generateBotResponse, regenerateSwipe, checkCloudRateLimit } from './generationService';
+export { generateBotResponse, regenerateSwipe } from './generationService';

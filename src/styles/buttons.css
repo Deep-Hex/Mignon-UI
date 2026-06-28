@@ -1,6 +1,5 @@
-/* ── BUTTONS ─────────────────────────────── */
-.primary-btn {
-    background: var(--blue);
+.primary-btn,
+.secondary-btn {
     border: var(--border-width) solid var(--border);
     color: var(--text);
     padding: 10px 16px;
@@ -15,6 +14,14 @@
     gap: 8px;
     box-shadow: var(--shadow-md);
     transition: var(--tf);
+}
+
+.primary-btn {
+    background: var(--blue);
+}
+
+.secondary-btn {
+    background: var(--purple);
 }
 
 .primary-btn:hover,
@@ -32,35 +39,16 @@
 }
 
 .primary-btn.full-width {
-    width: 100%
+    width: 100%;
 }
 
-.primary-btn i {
+.primary-btn i,
+.primary-btn svg,
+.secondary-btn i,
+.secondary-btn svg {
     width: 16px;
-    height: 16px
-}
-
-.secondary-btn {
-    background: var(--purple);
-    border: var(--border-width) solid var(--border);
-    color: var(--text);
-    padding: 10px 16px;
-    border-radius: var(--r-md);
-    font-weight: bold;
-    font-size: .9rem;
-    font-family: var(--font-head);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    box-shadow: var(--shadow-md);
-    transition: var(--tf);
-}
-
-.secondary-btn i {
-    width: 16px;
-    height: 16px
+    height: 16px;
+    flex-shrink: 0;
 }
 
 .circle-btn {
@@ -80,10 +68,9 @@
 
 .circle-btn i {
     width: 20px;
-    height: 20px
+    height: 20px;
 }
 
 .cursor-pointer {
-    cursor: pointer
-}
-
+    cursor: pointer;
+}

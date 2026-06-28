@@ -89,7 +89,6 @@ async function _initDatabaseInternal() {
       personality TEXT,
       scenario TEXT,
       example_dialogue TEXT,
-      nsfw_inject INTEGER DEFAULT 0,
       alternate_greetings TEXT DEFAULT '[]',
       system_prompt TEXT,
       post_history_instructions TEXT,
@@ -219,7 +218,6 @@ async function _initDatabaseInternal() {
     personality: "TEXT",
     scenario: "TEXT",
     example_dialogue: "TEXT",
-    nsfw_inject: "INTEGER DEFAULT 0",
     alternate_greetings: "TEXT DEFAULT '[]'",
     system_prompt: "TEXT",
     post_history_instructions: "TEXT",
@@ -286,13 +284,23 @@ async function _initDatabaseInternal() {
   }
 
   // Seed default characters individually if they do not exist
+  try {
+    const charsInfo = await db.select(`PRAGMA table_info(characters)`);
+    if (charsInfo.some(c => c.name.toLowerCase() === 'nsfw_inject')) {
+      await db.execute(`ALTER TABLE characters DROP COLUMN nsfw_inject`);
+      console.log("[DB] Dropped nsfw_inject column from characters table.");
+    }
+  } catch (e) {
+    console.error("[DB] Could not drop nsfw_inject column:", e);
+  }
+
   for (const char of DEFAULT_CHARACTERS) {
     const existing = await db.select("SELECT id FROM characters WHERE name = ?", [char.name]);
     if (existing.length === 0) {
       await db.execute(
         `INSERT INTO characters (
-          name, avatar, greeting, personality, scenario, example_dialogue, nsfw_inject, alternate_greetings, is_active
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          name, avatar, greeting, personality, scenario, example_dialogue, alternate_greetings, is_active
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           char.name,
           char.avatar,
@@ -300,7 +308,6 @@ async function _initDatabaseInternal() {
           char.personality,
           char.scenario,
           char.example_dialogue,
-          char.nsfw_inject ? 1 : 0,
           JSON.stringify(char.alternate_greetings || []),
           char.is_active ? 1 : 0
         ]

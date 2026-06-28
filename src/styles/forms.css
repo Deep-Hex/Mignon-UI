@@ -1,23 +1,23 @@
 /* Forms */
 .form-group {
-    margin-bottom: 20px
+    margin-bottom: 20px;
 }
 
 .form-group.flex-fill {
-    flex: 1
+    flex: 1;
 }
 
 .form-group.half {
-    flex: 0 0 calc(50% - 10px)
+    flex: 0 0 calc(50% - 10px);
 }
 
 .form-row {
     display: flex;
-    gap: 20px
+    gap: 20px;
 }
 
 .form-row.align-center {
-    align-items: center
+    align-items: center;
 }
 
 .form-group label {
@@ -33,17 +33,26 @@
 .form-group input[type="password"],
 .form-group input[type="number"],
 .form-group textarea,
-.form-group select {
+.form-group select,
+.collapsible-content textarea.collapsible-textarea,
+.collapsible-content input.collapsible-input {
     width: 100%;
-    background: var(--bg-window);
     border: var(--border-width) solid var(--border);
-    border-radius: var(--r-md);
-    padding: 12px 16px;
     color: var(--text);
     font-family: var(--font-code);
+    box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.1);
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="number"],
+.form-group textarea,
+.form-group select {
+    background: var(--bg-window);
+    border-radius: var(--r-md);
+    padding: 12px 16px;
     font-size: 1rem;
     font-weight: bold;
-    box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.1);
     resize: vertical;
 }
 
@@ -55,7 +64,7 @@
 
 .form-group select option {
     background: var(--bg-window);
-    color: var(--text)
+    color: var(--text);
 }
 
 .form-group input:focus,
@@ -65,11 +74,37 @@
     background: var(--bg-window);
 }
 
+/* Custom Select Arrow Styling to prevent the arrow from being too close to the border */
+select {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    background-repeat: no-repeat !important;
+    background-position: right 10px center !important;
+    background-size: 12px !important;
+    padding-right: 30px !important;
+    cursor: pointer;
+}
+
+select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230f172a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='m6 9 6 6 6-6'/%3e%3c/svg%3e") !important;
+}
+
+.dark-theme select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f1f5f9' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='m6 9 6 6 6-6'/%3e%3c/svg%3e") !important;
+}
+
+.form-group select {
+    background-position: right 16px center !important;
+    background-size: 14px !important;
+    padding-right: 44px !important;
+}
+
 .form-group input[type="range"] {
     width: 100%;
     accent-color: var(--primary);
     height: 8px;
-    border-radius: 4px;
+    border-radius: var(--r-sm);
     background: var(--bg-window);
     border: var(--border-width) solid var(--border);
     padding: 0;
@@ -155,13 +190,13 @@
 .avatar-upload-box img {
     width: 100%;
     height: 100%;
-    object-fit: cover
+    object-fit: cover;
 }
 
 .avatar-upload-box .placeholder-icon {
     color: var(--text);
     width: 24px;
-    height: 24px
+    height: 24px;
 }
 
 .scale-in {
@@ -328,26 +363,31 @@
     margin-top: 8px;
 }
 
-.card-action-btn {
+.card-action-btn,
+.mini-silly-btn {
     flex: 1;
     background: var(--bg-window);
     border: var(--border-width) solid var(--border);
     color: var(--text);
-    font-family: var(--font-head);
-    font-weight: bold;
-    font-size: 0.72rem;
-    padding: 6px 10px;
     border-radius: var(--r-sm);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
     transition: var(--tf);
     box-shadow: 2px 2px 0px var(--shadow-color);
 }
 
-.card-action-btn:hover {
+.card-action-btn {
+    font-family: var(--font-head);
+    font-weight: bold;
+    font-size: 0.72rem;
+    padding: 6px 10px;
+    gap: 4px;
+}
+
+.card-action-btn:hover,
+.mini-silly-btn:hover:not(:disabled) {
     transform: translate(1px, 1px);
     box-shadow: 1px 1px 0px var(--shadow-color);
     background: var(--bg-input);
@@ -425,25 +465,8 @@
 
 /* ── SILLY TAVERN COMPANION MINI ACTIONS ─────────── */
 .mini-silly-btn {
-    flex: 1;
     min-width: 0;
     aspect-ratio: 1 / 1;
-    background: var(--bg-window);
-    border: var(--border-width) solid var(--border);
-    color: var(--text);
-    border-radius: var(--r-sm);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--tf);
-    box-shadow: 2px 2px 0px var(--shadow-color);
-}
-
-.mini-silly-btn:hover:not(:disabled) {
-    transform: translate(1px, 1px);
-    box-shadow: 1px 1px 0px var(--shadow-color);
-    background: var(--bg-input);
 }
 
 .mini-silly-btn.active {
@@ -605,7 +628,6 @@
 .card-definition-container {
     display: flex;
     flex-direction: column;
-    gap: 12px;
     width: 100%;
 }
 
@@ -636,20 +658,22 @@
 }
 
 .collapsible-card {
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--r-md);
-    background: var(--bg-window);
+    border-bottom: var(--border-width) solid var(--border);
+    background: transparent;
     overflow: hidden;
-    transition: box-shadow var(--tf), border-color var(--tf);
-    box-shadow: var(--shadow-sm);
+    transition: background-color var(--tf);
+}
+
+.collapsible-card:last-child {
+    border-bottom: none;
 }
 
 .collapsible-card:hover {
-    border-color: var(--pink);
+    background: rgba(255, 183, 206, 0.02);
 }
 
 .collapsible-card.expanded {
-    box-shadow: var(--shadow-md);
+    background: rgba(0, 0, 0, 0.1);
 }
 
 .collapsible-header {
@@ -657,7 +681,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 14px 18px;
+    padding: 16px 24px;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -719,23 +743,20 @@
 .collapsible-content-wrapper {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: max-height 0.45s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .collapsible-card.expanded .collapsible-content-wrapper {
-    max-height: 1000px;
+    max-height: 800px;
 }
 
 .collapsible-content {
-    padding: 0 18px 18px 18px;
+    min-height: 0;
+    padding: 14px 24px 24px 24px;
     border-top: var(--border-width) dashed var(--border);
     display: flex;
     flex-direction: column;
     gap: 12px;
-}
-
-.collapsible-card.expanded .collapsible-content {
-    padding-top: 14px;
 }
 
 .collapsible-content .field-desc {
@@ -747,18 +768,14 @@
 }
 
 .collapsible-content textarea.collapsible-textarea {
-    width: 100%;
     min-height: 120px;
+    max-height: 500px;
     background: var(--bg-input);
-    border: var(--border-width) solid var(--border);
     border-radius: var(--r-sm);
     padding: 10px 14px;
-    color: var(--text);
-    font-family: var(--font-code);
     font-size: 0.88rem;
     line-height: 1.4;
     resize: vertical;
-    box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.1);
 }
 
 .collapsible-content textarea.collapsible-textarea.textarea-desc {
@@ -778,15 +795,10 @@
 }
 
 .collapsible-content input.collapsible-input {
-    width: 100%;
     background: var(--bg-input);
-    border: var(--border-width) solid var(--border);
     border-radius: var(--r-sm);
     padding: 10px 14px;
-    color: var(--text);
-    font-family: var(--font-code);
     font-size: 0.88rem;
-    box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.1);
 }
 
 /* Divider: Legacy Fields */
@@ -806,20 +818,24 @@
     opacity: 0.3;
 }
 
-.legacy-badge {
+.legacy-badge,
+.add-field-pill-btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 14px;
     background: var(--bg-window);
     border: var(--border-width) solid var(--border);
     border-radius: var(--r-full);
     font-family: var(--font-head);
-    font-size: 0.72rem;
     font-weight: bold;
+    box-shadow: var(--shadow-sm);
+}
+
+.legacy-badge {
+    padding: 6px 14px;
+    font-size: 0.72rem;
     color: var(--text-sec);
     text-transform: uppercase;
-    box-shadow: var(--shadow-sm);
 }
 
 .legacy-badge svg {
@@ -828,19 +844,10 @@
 
 /* Add Optional Fields Pill Buttons */
 .add-field-pill-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
     padding: 8px 16px;
-    background: var(--bg-window);
-    border: var(--border-width) solid var(--border);
-    border-radius: var(--r-full);
     color: var(--text);
-    font-family: var(--font-head);
     font-size: 0.78rem;
-    font-weight: bold;
     cursor: pointer;
-    box-shadow: var(--shadow-sm);
     transition: transform var(--tf), box-shadow var(--tf), background-color var(--tf);
 }
 

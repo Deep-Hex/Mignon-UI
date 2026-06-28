@@ -8,7 +8,61 @@ use aes_gcm::{
 use std::fs;
 use std::fs::File;
 use std::io::{Read, Write};
+use std::path::Path;
 use tauri::{AppHandle, Manager};
+use url::Url;
+
+// Helper to validate url scheme is http or https
+fn is_safe_url(url_str: &str) -> bool {
+    if let Ok(parsed) = Url::parse(url_str) {
+        parsed.scheme() == "http" || parsed.scheme() == "https"
+    } else {
+        false
+    }
+}
+
+// Helper to validate update download url
+fn is_safe_update_url(url_str: &str) -> bool {
+    let parsed = match Url::parse(url_str) {
+        Ok(u) => u,
+        Err(_) => return false,
+    };
+    if parsed.scheme() != "https" {
+        return false;
+    }
+    let host = match parsed.host_str() {
+        Some(h) => h,
+        None => return false,
+    };
+    if host != "github.com" && host != "api.github.com" {
+        return false;
+    }
+    let path = parsed.path();
+    if !path.starts_with("/Deep-Hex/Mignon-UI/releases/") &&
+       !path.starts_with("/repos/Deep-Hex/Mignon-UI/releases/") {
+        return false;
+    }
+    true
+}
+
+// Helper to sanitize filename and prevent path traversal
+fn sanitize_filename(filename: &str) -> Result<String, String> {
+    let path = Path::new(filename);
+    let file_name = path.file_name()
+        .ok_or_else(|| "Invalid filename: no filename component".to_string())?
+        .to_str()
+        .ok_or_else(|| "Invalid filename: invalid UTF-8".to_string())?;
+
+    if file_name.is_empty() || file_name == "." || file_name == ".." {
+        return Err("Invalid filename: reserved name".to_string());
+    }
+
+    if file_name.contains('/') || file_name.contains('\\') {
+        return Err("Invalid filename: contains path separators".to_string());
+    }
+
+    Ok(file_name.to_string())
+}
 
 // Helper to decode a hex string to bytes
 fn hex_decode(hex_str: &str) -> Result<Vec<u8>, String> {
@@ -105,6 +159,9 @@ fn decrypt_key(app: AppHandle, encrypted_str: String) -> Result<String, String> 
         }
 
         let nonce_bytes = hex_decode(parts[0])?;
+        if nonce_bytes.len() != 12 {
+            return Err("Invalid nonce length: must be 12 bytes".to_string());
+        }
         let cipher_bytes = hex_decode(parts[1])?;
 
         let decrypted = aes_gcm_decrypt(&nonce_bytes, &cipher_bytes, &key)?;
@@ -148,6 +205,9 @@ fn set_system_bars_color(window: tauri::Window, color_hex: String, dark_icons: b
 
 #[tauri::command]
 fn open_url(url: String) -> Result<(), String> {
+    if !is_safe_url(&url) {
+        return Err("Blocked opening unsafe URL: Only http and https schemes are allowed".to_string());
+    }
     open_file_natively(&url)
 }
 
@@ -157,8 +217,13 @@ fn start_update_download(
     url: String,
     filename: String,
 ) -> Result<(), String> {
+    if !is_safe_update_url(&url) {
+        return Err("Blocked update download: Invalid update URL".to_string());
+    }
+    let safe_filename = sanitize_filename(&filename)?;
+
     std::thread::spawn(move || {
-        if let Err(e) = download_and_open(&app, &url, &filename) {
+        if let Err(e) = download_and_open(&app, &url, &safe_filename) {
             use tauri::Emitter;
             let _ = app.emit("download-error", e);
         }
@@ -215,8 +280,8 @@ fn download_and_open(app: &tauri::AppHandle, url: &str, filename: &str) -> Resul
 fn open_file_natively(path: &str) -> Result<(), String> {
     #[cfg(target_os = "windows")]
     {
-        std::process::Command::new("cmd")
-            .args(["/C", "start", "", path])
+        std::process::Command::new("explorer")
+            .arg(path)
             .spawn()
             .map_err(|e| e.to_string())?;
     }
@@ -240,6 +305,8 @@ fn open_file_natively(path: &str) -> Result<(), String> {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_fs::init())
+        .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_sql::Builder::default().build())
         .plugin(tauri_plugin_http::init())
         .invoke_handler(tauri::generate_handler![

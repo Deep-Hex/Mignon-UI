@@ -20,6 +20,7 @@
     --text-tab-active: #ffffff;
     --bg-card-hover: #f1f5f9;
     --bg-card-active: #e2e8f0;
+    --bg-card: var(--bg-window);
 
     /* Builder Bot Accents - Primary Plastic Brick Colors (Light Mode) */
     --accent-cyan-bg: #0055a5;      /* Builder Classic Blue */
@@ -39,6 +40,7 @@
     --shadow-color: #1b1b1b;
     --shadow-sm: 3px 3px 0px var(--shadow-color); /* Hard solid blocky 3D offsets! */
     --shadow-md: 6px 6px 0px var(--shadow-color);
+    --shadow-lg: 8px 8px 0px var(--shadow-color);
 
     --pink: #d31212;             /* Builder Red primary accent */
     --blue: #0055a5;             /* Builder Blue secondary accent */
@@ -76,6 +78,7 @@
     --text-tab-active: #ffffff;
     --bg-card-hover: #2f2f36;
     --bg-card-active: #2f2f36;
+    --bg-card: var(--bg-window);
 
     /* Builder Bot Accents - Primary Plastic Brick Colors (Dark Mode) */
     --accent-cyan-bg: #0055a5;      /* Builder Classic Blue */
@@ -95,6 +98,7 @@
     --shadow-color: #ffffff;
     --shadow-sm: 3px 3px 0px #000; /* Blocky hard shadows */
     --shadow-md: 6px 6px 0px #000;
+    --shadow-lg: 8px 8px 0px #000;
 
     --pink: #f5c400;             /* Builder Yellow accent in dark mode */
     --blue: #00852b;             /* Builder Green secondary */

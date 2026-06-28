@@ -29,7 +29,7 @@
 }
 
 .toast--success {
-    border-left: 6px solid #4ade80;
+    border-left: 6px solid var(--status-online);
 }
 
 .toast--error {

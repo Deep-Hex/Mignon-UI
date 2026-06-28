@@ -31,7 +31,7 @@ export default function MemoryModal({ isOpen }) {
         <div className="modal-header">
           <h2 id="memories-modal-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <Scroll size={18} className="text-accent" /> 
-            Memory Chronicle Book
+            Smart Memory Book
           </h2>
           <button className="modal-close-btn" onClick={() => ui.setActiveModal(null)}>
             <X size={18} />
@@ -56,7 +56,7 @@ export default function MemoryModal({ isOpen }) {
           ) : memories.length === 0 ? (
             <div className="text-center py-30" style={{ color: 'var(--text-muted)', border: '1px dashed rgba(255,255,255,0.08)', borderRadius: '8px', padding: '20px' }}>
               <AlertCircle size={24} style={{ margin: '0 auto 8px', opacity: 0.6 }} />
-              <div style={{ fontWeight: '500', marginBottom: '4px' }}>Chronicle Book is Empty</div>
+              <div style={{ fontWeight: '500', marginBottom: '4px' }}>Smart Memory Book is Empty</div>
               <div style={{ fontSize: '0.8rem' }}>Once this chat reaches 15+ messages, the first chapter will write itself automatically!</div>
             </div>
           ) : (

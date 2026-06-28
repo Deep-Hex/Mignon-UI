@@ -1,10 +1,10 @@
-# 🧠 Chronicle Memory & Semantic RAG Engine
+# 🧠 Smart Memory & Semantic RAG Engine
 
-Mignon UI solves the problem of local context limits and hardware VRAM exhaustion by combining an asynchronous, milestone-aware **Chronicle Memory Book** with a serverless, client-side **SQLite RAG database** utilizing **Jina v2 Small** embeddings.
+Mignon UI solves the problem of local context limits and hardware VRAM exhaustion by combining an asynchronous, milestone-aware **Smart Memory Book** with a serverless, client-side **SQLite RAG database** utilizing **Jina v2 Small** embeddings.
 
 ---
 
-## 📜 Chronicle Memory Book
+## 📜 Smart Memory Book
 
 Instead of feeding thousands of historical chat logs directly into the LLM context (which balloons prompt evaluation latency), Mignon UI runs an asynchronous background summarization trigger inside the [api.js](../src/services/api.js) service layer.
 

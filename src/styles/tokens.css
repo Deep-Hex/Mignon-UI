@@ -14,15 +14,17 @@
     --text-tab-active: var(--text);
     --bg-card-hover: var(--bg-input);
     --bg-card-active: var(--bg-input);
-
+    --bg-card: var(--bg-window);
 
     --border: #000000;
     --border-width: 2px;
     --shadow-color: #000000;
     --shadow-sm: 2px 2px 0px var(--shadow-color);
     --shadow-md: 4px 4px 0px var(--shadow-color);
+    --shadow-lg: 8px 8px 0px var(--shadow-color);
 
     --pink: #ffb7ce;
+    --pink-hover: #ff85a7;
     --blue: #a3defe;
     --purple: #d8bfd8;
     --primary: #6b3649;
@@ -38,6 +40,7 @@
 
     --tf: 0.1s ease;
     --tn: 0.1s ease;
+    --r-xs: 2px;
     --r-sm: 4px;
     --r-md: 8px;
     --r-lg: 12px;
@@ -54,7 +57,7 @@
     --accent-purple-bg: #e8dbfc;
     --accent-amber-bg: #ffecd2;
     --accent-emerald-bg: #d8f3dc;
-    
+
     --accent-cyan-text: var(--text);
     --accent-magenta-text: var(--text);
     --accent-purple-text: var(--text);
@@ -63,32 +66,50 @@
 }
 
 :root.dark-theme {
-    --bg: #0d0714;               /* Ultra deep obsidian purple */
-    --bg-dot: #221331;           /* Luminous dark purple mesh dot */
-    --bg-window: #150f1f;        /* Rich dark violet slate for card panes */
+    --bg: #0d0714;
+    /* Ultra deep obsidian purple */
+    --bg-dot: #221331;
+    /* Luminous dark purple mesh dot */
+    --bg-window: #150f1f;
+    /* Rich dark violet slate for card panes */
     --bg-chat: #150f1f;
-    --bg-input: #1e162b;         /* Rich dark violet input bg */
-    --bg-bubble-bot: #3d1a29;    /* Rich Cyber Raspberry-plum for bot bubble */
-    --bg-bubble-user: #1b3a57;   /* Rich Cornflower Sapphire for user bubble */
-    --bg-grid: #261b35;          /* Luminous dark violet grid lines */
-    --bg-lore-hover: #26173a;    /* Glowing royal violet slate */
+    --bg-input: #1e162b;
+    /* Rich dark violet input bg */
+    --bg-bubble-bot: #3d1a29;
+    /* Rich Cyber Raspberry-plum for bot bubble */
+    --bg-bubble-user: #1b3a57;
+    /* Rich Cornflower Sapphire for user bubble */
+    --bg-grid: #261b35;
+    /* Luminous dark violet grid lines */
+    --bg-lore-hover: #26173a;
+    /* Glowing royal violet slate */
     --bg-nav-container: var(--bg-input);
     --bg-tab-active: var(--bg-window);
     --text-tab-active: var(--pink);
     --bg-card-hover: var(--bg-input);
     --bg-card-active: var(--bg-input);
+    --bg-card: var(--bg-window);
 
 
-    --pink: #e54b7c;             /* Rich Cyber Raspberry rose */
-    --blue: #4ba3e3;             /* Rich Cornflower sky blue */
-    --purple: #9e68c9;           /* Rich royal orchid purple */
-    --primary: #802b4d;          /* Royal deep raspberry wine */
+    --pink: #e54b7c;
+    --pink-hover: #f06292;
+    /* Rich Cyber Raspberry rose */
+    --blue: #4ba3e3;
+    /* Rich Cornflower sky blue */
+    --purple: #9e68c9;
+    /* Rich royal orchid purple */
+    --primary: #802b4d;
+    /* Royal deep raspberry wine */
     --primary-text: #ffffff;
-    --cat-fur: #ffffff;          /* Crisp white fur matching theme standard */
+    --cat-fur: #ffffff;
+    /* Crisp white fur matching theme standard */
 
-    --text: #f3eef9;             /* Crisp cream violet */
-    --text-sec: #bbaed4;         /* Rich lilac silver */
-    --text-muted: #7d6b99;       /* Velvet purple slate */
+    --text: #f3eef9;
+    /* Crisp cream violet */
+    --text-sec: #bbaed4;
+    /* Rich lilac silver */
+    --text-muted: #7d6b99;
+    /* Velvet purple slate */
 
     --status-online: #34d399;
     --status-offline: #fb7185;
@@ -106,5 +127,3 @@
     --accent-amber-text: var(--text);
     --accent-emerald-text: var(--text);
 }
-
-

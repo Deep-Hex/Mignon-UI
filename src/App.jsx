@@ -7,9 +7,9 @@ import { useChatContext } from './context/ChatContext';
 import { useUIContext } from './context/UIContext';
 
 // Subcomponents import
-import Sidebar from './components/Layout/Sidebar';
+import Sidebar from './components/Sidebar/Sidebar';
 import ChatView from './components/Chat/ChatView';
-import WorldDetail from './components/Worlds/WorldDetail';
+import LoreDetail from './components/Lore/LoreDetail';
 import LandingView from './components/Layout/LandingView';
 import UpdateBanner from './components/Layout/UpdateBanner';
 
@@ -20,9 +20,9 @@ const CharacterModal = React.lazy(() => import('./components/Modals/CharacterMod
 const RoomModal = React.lazy(() => import('./components/Modals/RoomModal'));
 const LoreModal = React.lazy(() => import('./components/Modals/LoreModal'));
 const MemoryModal = React.lazy(() => import('./components/Modals/MemoryModal'));
-const WorldModal = React.lazy(() => import('./components/Modals/WorldModal'));
+const LoreBookModal = React.lazy(() => import('./components/Modals/LoreBookModal'));
 const PersonaPickerModal = React.lazy(() => import('./components/Modals/PersonaPickerModal'));
-import UIStickerCanvas from './components/UIStickers/UIStickerCanvas';
+import UIStickerCanvas from './components/Layout/UIStickerCanvas';
 
 function MainLayout() {
   const chat = useChatContext();
@@ -67,7 +67,7 @@ function MainLayout() {
         <UpdateBanner />
 
         {/* World Detail Panel */}
-        {ui.activeWorldDetail && <WorldDetail />}
+        {ui.activeWorldDetail && <LoreDetail />}
 
         {/* Landing Hub */}
         <LandingView show={!chat.activeRoom && !ui.activeWorldDetail} />
@@ -83,7 +83,7 @@ function MainLayout() {
         <RoomModal isOpen={ui.activeModal === 'room'} />
         <LoreModal isOpen={ui.activeModal === 'lore'} />
         <MemoryModal isOpen={ui.activeModal === 'memories'} />
-        <WorldModal isOpen={ui.activeModal === 'world'} />
+        <LoreBookModal isOpen={ui.activeModal === 'world'} />
         <PersonaPickerModal isOpen={ui.activeModal === 'persona-picker'} />
       </React.Suspense>
       <OnboardingModal />

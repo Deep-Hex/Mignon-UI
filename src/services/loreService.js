@@ -1,5 +1,5 @@
-// src/services/worldService.js
-// Client-side World and Lore service. Manages worlds/settings, lore keys, and lore RAG index.
+// src/services/loreService.js
+// Client-side Lore service. Manages lore books/settings, lore keys, and lore RAG index.
 
 import * as crud from './crud';
 import * as rag from './rag';
@@ -10,6 +10,10 @@ export async function fetchWorlds() {
 
 export async function createWorld(worldData) {
   return crud.createWorld(worldData);
+}
+
+export async function updateWorld(id, worldData) {
+  return crud.updateWorld(id, worldData);
 }
 
 export async function deleteWorld(id) {
@@ -58,4 +62,30 @@ export async function saveLore(loreForm) {
 export async function deleteLore(id) {
   await rag.deleteEmbedding(`lore_${id}`);
   return crud.deleteLore(id);
+}
+
+export async function importWorldInfo(fileName, jsonData) {
+  const name = fileName.replace(/\.json$/i, '');
+  const description = `Imported from ${fileName}`;
+  const world = await crud.createWorld({ name, description });
+
+  if (jsonData && jsonData.entries) {
+    const entries = Object.values(jsonData.entries);
+    for (const entry of entries) {
+      const keys = Array.isArray(entry.key) ? entry.key.join(', ') : (entry.key || '');
+      const savedLore = await crud.createLore({
+        world_id: world.id,
+        title: entry.comment || (Array.isArray(entry.key) && entry.key[0]) || `Entry ${entry.uid}`,
+        keys: keys,
+        content: entry.content || '',
+        weight: entry.order !== undefined ? entry.order : 100,
+        is_active: true
+      });
+
+      // Index in RAG vector store
+      const textToEmbed = `[LORE: ${savedLore.title}]\nTrigger keywords: ${savedLore.keys}\n\n${savedLore.content}`;
+      await rag.saveEmbedding(`lore_${savedLore.id}`, "lore", String(world.id), savedLore.title, textToEmbed);
+    }
+  }
+  return world;
 }

@@ -26,7 +26,6 @@ const TAG_RULES = {
   sassy: ["sassy", "snarky", "sarcastic", "witty", "attitude", "cheeky", "smug"],
   dominant: ["dominant", "demanding", "bossy", "in control", "commanding", "leader", "alpha", "subjugate"],
   submissive: ["submissive", "obedient", "compliant", "meek", "yield", "servitude"],
-  nsfw: ["nsfw", "mature", "lewd", "sensual", "lust", "erotic", "intimate"],
   gaming: ["gamer", "gaming", "video game", "console", "streamer", "virtual"],
   ninja: ["ninja", "shinobi", "kunai", "stealth", "shadow"],
   assassin: ["assassin", "hitman", "poison", "contract", "stealth", "target"],
@@ -63,7 +62,6 @@ const TAG_TEMPLATES = {
   sassy: "This character is sassy, snarky, sarcastic, or witty.",
   dominant: "This character is dominant, commanding, bossy, or in control.",
   submissive: "This character is submissive, obedient, or compliant.",
-  nsfw: "This character card is NSFW, mature, lewd, or sexual.",
   gaming: "This character is a gamer or video game character.",
   ninja: "This character is a ninja or shinobi.",
   assassin: "This character is an assassin or stealth killer.",
@@ -105,10 +103,9 @@ async function getTagEmbeddings() {
   return { names: cachedTagNames, vectors: cachedTagVectors };
 }
 
-function keywordFallbackTags(combinedText, isMinor) {
+function keywordFallbackTags(combinedText) {
   const matched = [];
   for (const [tag, keywords] of Object.entries(TAG_RULES)) {
-    if (tag === "nsfw" && isMinor) continue;
     for (const kw of keywords) {
       const reg = new RegExp(`\\b${escapeRegexForTags(kw)}\\b`, 'i');
       if (reg.test(combinedText)) {
@@ -132,34 +129,6 @@ export async function generateCharacterTags(name, personality, scenario) {
 
   const combinedText = charDesc.toLowerCase();
 
-  // 1. Underage check (never return nsfw tags for minors)
-  let isMinor = false;
-  const ageMatch = combinedText.match(/\bage:\s*(\d+)\b/);
-  if (ageMatch) {
-    try {
-      const age = parseInt(ageMatch[1], 10);
-      if (age < 18) {
-        isMinor = true;
-      }
-    } catch {
-      // ignore
-    }
-  }
-
-  if (!isMinor) {
-    // Check text patterns representing minors (e.g. "14-year-old", "high school freshman")
-    const minorPatterns = [
-      /\b(1[0-7]|\d)-year-old\b/i,
-      /\b(1[0-7]|\d)\s+years\s+old\b/i,
-      /\bminor\b/i,
-      /\bhigh\s+school\s+freshman\b/i,
-      /\bmiddle\s+school\b/i
-    ];
-    if (minorPatterns.some(pat => pat.test(combinedText))) {
-      isMinor = true;
-    }
-  }
-
   try {
     const { names: tagNames, vectors: tagVecs } = await getTagEmbeddings();
 
@@ -176,9 +145,6 @@ export async function generateCharacterTags(name, personality, scenario) {
     for (let i = 0; i < tagNames.length; i++) {
       const tag = tagNames[i];
       const tagVec = tagVecs[i];
-
-      // Underage NSFW block
-      if (tag === "nsfw" && isMinor) continue;
 
       let score = 0;
       for (let j = 0; j < charVec.length; j++) {
@@ -236,7 +202,7 @@ export async function generateCharacterTags(name, personality, scenario) {
 
   } catch (e) {
     console.warn("[Tags] Semantic tag generation failed. Falling back to keyword search...", e);
-    const matched = keywordFallbackTags(combinedText, isMinor);
+    const matched = keywordFallbackTags(combinedText);
     return { tags: matched };
   }
 }

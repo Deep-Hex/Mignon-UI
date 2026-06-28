@@ -2,9 +2,9 @@
 import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import * as api from '../services/api';
 
-const LoreWorldContext = createContext(null);
+const LoreBookContext = createContext(null);
 
-export function LoreWorldProvider({ children }) {
+export function LoreBookProvider({ children }) {
   const [lore, setLore] = useState([]);
   const [worlds, setWorlds] = useState([]);
   const [currentWorldId, setCurrentWorldId] = useState(null);
@@ -71,6 +71,21 @@ export function LoreWorldProvider({ children }) {
     await fetchLore();
   }, [fetchWorlds, fetchLore]);
 
+  const handleWorldImport = useCallback(async (fileName, jsonData) => {
+    const newWorld = await api.importWorld(fileName, jsonData);
+    await fetchWorlds();
+    await fetchLore();
+    if (newWorld?.id) setCurrentWorldId(newWorld.id);
+    return newWorld;
+  }, [fetchWorlds, fetchLore]);
+
+  const handleRenameWorld = useCallback(async (worldId, newName) => {
+    const world = worlds.find(w => w.id === worldId);
+    if (!world) return;
+    await api.updateWorld(worldId, { ...world, name: newName });
+    await fetchWorlds();
+  }, [worlds, fetchWorlds]);
+
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchLore();
@@ -85,7 +100,7 @@ export function LoreWorldProvider({ children }) {
     worldForm, setWorldForm,
     fetchLore, fetchWorlds,
     handleLoreSubmit, handleToggleLoreActive, handleDeleteLore, handleEditLoreClick,
-    handleWorldSubmit, handleDeleteWorld,
+    handleWorldSubmit, handleDeleteWorld, handleWorldImport, handleRenameWorld,
   }), [
     lore,
     worlds,
@@ -94,18 +109,18 @@ export function LoreWorldProvider({ children }) {
     worldForm,
     fetchLore, fetchWorlds,
     handleLoreSubmit, handleToggleLoreActive, handleDeleteLore, handleEditLoreClick,
-    handleWorldSubmit, handleDeleteWorld,
+    handleWorldSubmit, handleDeleteWorld, handleWorldImport, handleRenameWorld,
   ]);
 
   return (
-    <LoreWorldContext.Provider value={value}>
+    <LoreBookContext.Provider value={value}>
       {children}
-    </LoreWorldContext.Provider>
+    </LoreBookContext.Provider>
   );
 }
 
-export function useLoreWorldContext() {
-  const ctx = useContext(LoreWorldContext);
-  if (!ctx) throw new Error('useLoreWorldContext must be used within LoreWorldProvider');
+export function useLoreBookContext() {
+  const ctx = useContext(LoreBookContext);
+  if (!ctx) throw new Error('useLoreBookContext must be used within LoreBookProvider');
   return ctx;
 }

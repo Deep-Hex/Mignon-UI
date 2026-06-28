@@ -140,7 +140,6 @@ function serializeCharacterParams(char) {
     char.personality || null,
     char.scenario || null,
     char.example_dialogue || null,
-    char.nsfw_inject ? 1 : 0,
     JSON.stringify(char.alternate_greetings || []),
     char.system_prompt || null,
     char.post_history_instructions || null,
@@ -162,8 +161,8 @@ function deserializeCharacter(c) {
   }
   return {
     ...c,
-    nsfw_inject: c.nsfw_inject === 1,
-    alternate_greetings: Array.isArray(altGreetings) ? altGreetings : []
+    alternate_greetings: Array.isArray(altGreetings) ? altGreetings : [],
+    nsfw_inject: c.nsfw_inject === 1
   };
 }
 
@@ -177,8 +176,8 @@ export async function createCharacter(char) {
   const db = await getDb();
   await db.execute(
     `INSERT INTO characters (
-      world_id, name, avatar, greeting, personality, scenario, example_dialogue, nsfw_inject, alternate_greetings, system_prompt, post_history_instructions, creator, character_version, creator_notes
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      world_id, name, avatar, greeting, personality, scenario, example_dialogue, alternate_greetings, system_prompt, post_history_instructions, creator, character_version, creator_notes
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     serializeCharacterParams(char)
   );
   // Get last inserted character
@@ -190,7 +189,7 @@ export async function updateCharacter(id, char) {
   const db = await getDb();
   await db.execute(
     `UPDATE characters SET 
-      world_id = ?, name = ?, avatar = ?, greeting = ?, personality = ?, scenario = ?, example_dialogue = ?, nsfw_inject = ?, alternate_greetings = ?, system_prompt = ?, post_history_instructions = ?, creator = ?, character_version = ?, creator_notes = ?
+      world_id = ?, name = ?, avatar = ?, greeting = ?, personality = ?, scenario = ?, example_dialogue = ?, alternate_greetings = ?, system_prompt = ?, post_history_instructions = ?, creator = ?, character_version = ?, creator_notes = ?
      WHERE id = ?`,
     [...serializeCharacterParams(char), id]
   );
@@ -298,6 +297,15 @@ export async function createRoom(room) {
   return rooms.find(r => r.id === id);
 }
 
+export async function updateRoom(id, updates) {
+  const db = await getDb();
+  if (updates.name !== undefined) {
+    await db.execute("UPDATE chat_sessions SET name = ? WHERE id = ?", [updates.name, id]);
+  }
+  const rooms = await getRooms();
+  return rooms.find(r => r.id === id);
+}
+
 export async function deleteRoom(id) {
   const db = await getDb();
   await db.execute("DELETE FROM chat_sessions WHERE id = ?", [id]);
@@ -308,7 +316,7 @@ export async function deleteRoom(id) {
 export async function addRoomMember(roomId, characterId) {
   const db = await getDb();
   await db.execute(`INSERT OR IGNORE INTO room_members (room_id, character_id) VALUES (?, ?)`, [roomId, characterId]);
-  
+
   // Update is_group dynamically based on bots count (excluding persona character)
   const settings = await getSettings();
   const personaId = settings?.persona_character_id || null;
@@ -324,7 +332,7 @@ export async function addRoomMember(roomId, characterId) {
 export async function removeRoomMember(roomId, characterId) {
   const db = await getDb();
   await db.execute(`DELETE FROM room_members WHERE room_id = ? AND character_id = ?`, [roomId, characterId]);
-  
+
   // Update is_group dynamically based on bots count (excluding persona character)
   const settings = await getSettings();
   const personaId = settings?.persona_character_id || null;
@@ -430,7 +438,7 @@ export async function swipeMessage(roomId, msgId, newIndex) {
 
 export async function truncateMessages(roomId, messageId) {
   const db = await getDb();
-  
+
   // 1. Fetch and clean up episodic summaries that cover deleted messages
   const orphanedSummaries = await db.select(
     "SELECT id FROM chat_summaries WHERE room_id = ? AND end_message_id > ?",
@@ -446,7 +454,7 @@ export async function truncateMessages(roomId, messageId) {
 
   // 2. Delete messages after the target message
   await db.execute("DELETE FROM messages WHERE room_id = ? AND id > ?", [roomId, messageId]);
-  
+
   const messages = await getRoomMessages(roomId);
   return { messages, orphanedIds };
 }
@@ -457,7 +465,7 @@ export async function branchRoom(roomId, messageId) {
   const roomRows = await db.select("SELECT * FROM chat_sessions WHERE id = ?", [roomId]);
   if (roomRows.length === 0) throw new Error("Room not found");
   const originalRoom = roomRows[0];
-  
+
   // 2. Fetch room members
   const members = await db.select("SELECT character_id FROM room_members WHERE room_id = ?", [roomId]);
   const charIds = members.map(m => m.character_id);
@@ -465,12 +473,12 @@ export async function branchRoom(roomId, messageId) {
   // 3. Create branched room
   const newRoomId = crypto.randomUUID();
   const branchedRoomName = `${originalRoom.name} (Branched)`;
-  
+
   await db.execute(
     `INSERT INTO chat_sessions (id, name, is_group, description, scene_state) VALUES (?, ?, ?, ?, ?)`,
     [newRoomId, branchedRoomName, originalRoom.is_group, originalRoom.description, originalRoom.scene_state]
   );
-  
+
   for (const cid of charIds) {
     await db.execute(`INSERT INTO room_members (room_id, character_id) VALUES (?, ?)`, [newRoomId, cid]);
   }
@@ -480,7 +488,7 @@ export async function branchRoom(roomId, messageId) {
     "SELECT * FROM messages WHERE room_id = ? AND id <= ? ORDER BY id ASC",
     [roomId, messageId]
   );
-  
+
   const msgIdMap = {};
   for (const m of messagesToCopy) {
     const safeSwipes = typeof m.swipes === 'string'
@@ -540,6 +548,16 @@ export async function deleteWorld(id) {
   const db = await getDb();
   await db.execute("DELETE FROM worlds WHERE id = ?", [id]);
   return true;
+}
+
+export async function updateWorld(id, world) {
+  const db = await getDb();
+  await db.execute(
+    "UPDATE worlds SET name = ?, description = ? WHERE id = ?",
+    [world.name, world.description || null, id]
+  );
+  const rows = await db.select("SELECT * FROM worlds WHERE id = ?", [id]);
+  return rows[0];
 }
 
 // Lore Entries

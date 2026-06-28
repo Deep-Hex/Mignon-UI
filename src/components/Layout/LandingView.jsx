@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import DarfLogo from './DarfLogo';
+import Logo from '../UI/Logo';
 import { HeartHandshake, Users, ShieldCheck } from 'lucide-react';
 import { APP_NAME } from '../../config';
 
@@ -48,7 +48,7 @@ export default function LandingView({ show }) {
       </div>
 
       <div className="landing-hero">
-        <DarfLogo size={72} style={{ marginBottom: '8px' }} />
+        <Logo size={72} style={{ marginBottom: '8px' }} />
         <p className="hero-eyebrow">Just you & the bots</p>
         <h1 className="hero-title">
           Welcome to<br />

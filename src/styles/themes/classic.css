@@ -20,6 +20,7 @@
     --text-tab-active: #2563eb;  /* Tech Blue active text */
     --bg-card-hover: #f8fafc;
     --bg-card-active: #f1f5f9;
+    --bg-card: var(--bg-window);
 
     /* Classic Bot Accents - Premium Corporate Slate Colors (Light Mode) */
     --accent-cyan-bg: #e0f7fa;      /* Clean Teal */
@@ -39,6 +40,7 @@
     --shadow-color: rgba(15, 23, 42, 0.08); /* Extremely subtle blurred modern shadows */
     --shadow-sm: 0 1px 3px var(--shadow-color);
     --shadow-md: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color);
+    --shadow-lg: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -2px var(--shadow-color);
 
     --pink: #f8fafc;             /* Crisp clean light-slate header panel background */
     --blue: #2563eb;             /* Tech Blue secondary accent */
@@ -76,6 +78,7 @@
     --text-tab-active: #38bdf8;
     --bg-card-hover: #1e293b;
     --bg-card-active: #1e293b;
+    --bg-card: var(--bg-window);
 
     /* Classic Bot Accents - Premium Corporate Slate Colors (Dark Mode) */
     --accent-cyan-bg: #0c353f;      /* Muted Navy Teal */
@@ -95,6 +98,7 @@
     --shadow-color: rgba(0, 0, 0, 0.3); /* Soft shadows */
     --shadow-sm: 0 1px 3px var(--shadow-color);
     --shadow-md: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px var(--shadow-color);
+    --shadow-lg: 0 10px 15px -3px var(--shadow-color), 0 4px 6px -2px var(--shadow-color);
 
     --pink: #1e293b;             /* Sleek dark slate header panel background */
     --blue: #2563eb;             /* Tech Blue */

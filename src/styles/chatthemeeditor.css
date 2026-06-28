@@ -314,7 +314,9 @@
     width: 100%;
 }
 
-.chat-theme-card-doodle {
+.chat-theme-card-doodle,
+.chat-theme-card-upload,
+.chat-theme-card-solid {
     width: 160px;
     height: 110px;
     flex-shrink: 0;
@@ -325,6 +327,9 @@
     position: relative;
     overflow: hidden;
     transition: all 0.12s ease;
+}
+
+.chat-theme-card-doodle {
     background-repeat: repeat;
     background-size: 56px 56px;
 }
@@ -342,33 +347,19 @@
     background-image: linear-gradient(45deg, transparent 46%, var(--text) 46%, var(--text) 54%, transparent 54%), linear-gradient(-45deg, transparent 46%, var(--text) 46%, var(--text) 54%, transparent 54%);
 }
 
-.chat-theme-card-doodle.active {
+.chat-theme-card-doodle.active,
+.chat-theme-card-upload.active,
+.chat-theme-card-solid.active {
     border: 2.5px solid var(--pink) !important;
 }
 
-/* Background upload card and Solid Color card */
 .chat-theme-card-upload,
 .chat-theme-card-solid {
-    width: 160px;
-    height: 110px;
-    flex-shrink: 0;
-    cursor: pointer;
-    border: 2px solid var(--border);
-    border-radius: var(--r-md);
-    background-color: var(--bg-window);
-    position: relative;
-    overflow: hidden;
-    transition: all 0.12s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 8px;
-}
-
-.chat-theme-card-upload.active,
-.chat-theme-card-solid.active {
-    border: 2.5px solid var(--pink) !important;
 }
 
 /* Red remove button for background image uploads */

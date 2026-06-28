@@ -615,3 +615,26 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* Animated Mascot Eyes Blinking (extracted from loader.css to ensure standalone animation) */
+.y2k-mascot-svg .cat-eye-left,
+.y2k-mascot-svg .cat-eye-right {
+    animation: y2k-mascot-blink 5s infinite;
+}
+
+.y2k-mascot-svg .cat-eye-left {
+    transform-origin: 36px 55px;
+}
+
+.y2k-mascot-svg .cat-eye-right {
+    transform-origin: 64px 55px;
+}
+
+@keyframes y2k-mascot-blink {
+    0%, 86%, 89%, 92%, 100% {
+        transform: scale(1);
+    }
+    87.5%, 90.5% {
+        transform: scale(1.08, 0.05);
+    }
+}

@@ -2,12 +2,14 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import * as api from '../services/api';
 import { useCharacterContext } from './CharacterContext';
+import { useSettingsContext } from './SettingsContext';
 import { parseSseStream } from '../utils/sseParser';
 
 const ChatContext = createContext(null);
 
 export function ChatProvider({ children }) {
   const { characters } = useCharacterContext();
+  const { fetchSettings } = useSettingsContext();
   const [currentRoomId, setCurrentRoomId] = useState(() => localStorage.getItem('rp_current_room_id') || null);
   const [rooms, setRooms] = useState([]);
   const [activeRoomBots, setActiveRoomBots] = useState([]);
@@ -184,13 +186,14 @@ export function ChatProvider({ children }) {
   const handlePersonaPickerConfirm = useCallback(async (personaCharId, settings, setActiveModal, setActiveWorldDetail, setActiveTab) => {
     try {
       await api.saveSettings({ ...settings, persona_character_id: personaCharId });
+      await fetchSettings();
     } catch (e) { console.warn('Persona save failed:', e); }
     setActiveModal(null);
     if (pendingRoomId) {
       await _doEnterRoom(pendingRoomId, setActiveModal, setActiveTab, setActiveWorldDetail);
       setPendingRoomId(null);
     }
-  }, [pendingRoomId, _doEnterRoom]);
+  }, [pendingRoomId, _doEnterRoom, fetchSettings]);
 
   const handlePersonaPickerSkip = useCallback(async (setActiveModal, setActiveWorldDetail, setActiveTab) => {
     setActiveModal(null);
@@ -199,6 +202,15 @@ export function ChatProvider({ children }) {
       setPendingRoomId(null);
     }
   }, [pendingRoomId, _doEnterRoom]);
+
+  const handlePersonaPickerCancel = useCallback(async (setActiveModal) => {
+    setActiveModal(null);
+    if (pendingRoomId) {
+      await api.deleteRoom(pendingRoomId);
+      setPendingRoomId(null);
+      await fetchRooms();
+    }
+  }, [pendingRoomId, fetchRooms]);
 
   const handleRoomSubmit = useCallback(async (form) => {
     const roomData = {
@@ -219,6 +231,21 @@ export function ChatProvider({ children }) {
     await fetchRooms();
   }, [fetchRooms]);
 
+  const handleRenameRoom = useCallback(async (roomId, newName) => {
+    await api.updateRoom(roomId, { name: newName });
+    await fetchRooms();
+  }, [fetchRooms]);
+
+  const handleBulkDeleteRooms = useCallback(async (roomIds) => {
+    for (const id of roomIds) {
+      await api.deleteRoom(id);
+      if (currentRoomId === id) {
+        setCurrentRoomId(null);
+      }
+    }
+    await fetchRooms();
+  }, [currentRoomId, fetchRooms]);
+
   const handleDeleteActiveRoom = useCallback(async (showConfirm) => {
     if (!currentRoomId) return;
     const confirmed = await showConfirm('Are you sure you want to permanently delete this chat and all its message logs?');
@@ -231,12 +258,23 @@ export function ChatProvider({ children }) {
   }, [currentRoomId, fetchRooms]);
 
   const handleStartSingleChat = useCallback(async (character, setActiveModal, setActiveTab, setActiveWorldDetail) => {
-    const existing = rooms.find(r => !r.is_group && r.bots.length === 1 && r.bots[0].id === character.id);
-    if (existing) { handleEnterRoom(existing.id, setActiveModal, false, setActiveTab, setActiveWorldDetail); return; }
     const room = await api.createRoom({ name: character.name, is_group: false, character_ids: [character.id] });
     await fetchRooms();
     handleEnterRoom(room.id, setActiveModal, true, setActiveTab, setActiveWorldDetail);
-  }, [rooms, handleEnterRoom, fetchRooms]);
+  }, [handleEnterRoom, fetchRooms]);
+
+  const handleStartNewChat = useCallback(async (room, bots, setActiveModal, setActiveTab, setActiveWorldDetail) => {
+    if (!room) return;
+    const roomData = {
+      name: room.name,
+      is_group: room.is_group,
+      character_ids: bots.map(b => b.id),
+      description: room.description || '',
+    };
+    const newRoom = await api.createRoom(roomData);
+    await fetchRooms();
+    handleEnterRoom(newRoom.id, setActiveModal, false, setActiveTab, setActiveWorldDetail);
+  }, [fetchRooms, handleEnterRoom]);
 
   const handleToggleRoomChar = useCallback((charId) => {
     setRoomForm(prev => {
@@ -569,9 +607,9 @@ export function ChatProvider({ children }) {
     typingBot, swipeRegenMsgId, chatHistoryRef, chatTextareaRef,
     roomForm, setRoomForm,
     fetchRooms, loadRoomMessages,
-    handleEnterRoom, handlePersonaPickerConfirm, handlePersonaPickerSkip,
-    handleRoomSubmit, handleDeleteRoom, handleDeleteActiveRoom,
-    handleStartSingleChat, handleToggleRoomChar,
+    handleEnterRoom, handlePersonaPickerConfirm, handlePersonaPickerSkip, handlePersonaPickerCancel,
+    handleRoomSubmit, handleDeleteRoom, handleRenameRoom, handleBulkDeleteRooms, handleDeleteActiveRoom,
+    handleStartSingleChat, handleStartNewChat, handleToggleRoomChar,
     handleSendMessage, handleTextareaKeyDown,
     triggerBotResponse, handleSwipeMessage,
     triggerResponseRegeneration, insertAsteriskHelper, handleDeleteMessage,
@@ -590,9 +628,9 @@ export function ChatProvider({ children }) {
     typingBot, swipeRegenMsgId,
     roomForm,
     fetchRooms, loadRoomMessages,
-    handleEnterRoom, handlePersonaPickerConfirm, handlePersonaPickerSkip,
-    handleRoomSubmit, handleDeleteRoom, handleDeleteActiveRoom,
-    handleStartSingleChat, handleToggleRoomChar,
+    handleEnterRoom, handlePersonaPickerConfirm, handlePersonaPickerSkip, handlePersonaPickerCancel,
+    handleRoomSubmit, handleDeleteRoom, handleRenameRoom, handleBulkDeleteRooms, handleDeleteActiveRoom,
+    handleStartSingleChat, handleStartNewChat, handleToggleRoomChar,
     handleSendMessage, handleTextareaKeyDown,
     triggerBotResponse, handleSwipeMessage,
     triggerResponseRegeneration, insertAsteriskHelper, handleDeleteMessage,

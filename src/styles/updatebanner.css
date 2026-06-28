@@ -1,6 +1,4 @@
 /* Update Banner Stylesheet */
-/* Premium Glassmorphic Design matching Mignon UI themes */
-
 .update-banner-sticky-wrap {
   position: sticky;
   top: 0;
@@ -9,11 +7,13 @@
   z-index: 100;
   padding: 10px 16px;
   background: transparent;
-  pointer-events: none; /* Let clicks pass through when collapsed */
+  pointer-events: none;
+  /* Let clicks pass through when collapsed */
 }
 
 .update-banner {
-  pointer-events: auto; /* Re-enable pointer events for banner contents */
+  pointer-events: auto;
+  /* Re-enable pointer events for banner contents */
   display: flex;
   flex-direction: column;
   background: var(--bg-card, rgba(30, 20, 40, 0.75));
@@ -21,8 +21,8 @@
   -webkit-backdrop-filter: blur(20px);
   border: var(--border-width, 2px) solid var(--border, #000);
   border-radius: var(--r-md, 12px);
-  box-shadow: 4px 4px 0px rgba(0, 0, 0, 1), 
-              inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  box-shadow: var(--shadow-md),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
   overflow: hidden;
   position: relative;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -60,7 +60,7 @@
   border-radius: var(--r-sm, 8px);
   background: var(--blue, #4ba3e3);
   border: var(--border-width, 2px) solid var(--border, #000);
-  box-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
+  box-shadow: var(--shadow-sm);
   color: #000;
   flex-shrink: 0;
   animation: iconPulse 2s infinite ease-in-out;
@@ -90,7 +90,7 @@
   color: #000;
   font-weight: 800;
   border: 1px solid var(--border, #000);
-  box-shadow: 1px 1px 0px rgba(0, 0, 0, 1);
+  box-shadow: 1px 1px 0px var(--shadow-color);
 }
 
 .update-banner-desc {
@@ -110,54 +110,47 @@
   gap: 10px;
 }
 
-.update-banner-btn-download {
-  background: var(--pink, #e54b7c);
-  color: #000;
-  font-weight: bold;
+.update-banner-btn-download,
+.update-banner-btn-dismiss {
   border: var(--border-width, 2px) solid var(--border, #000);
-  box-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
+  box-shadow: var(--shadow-sm);
   border-radius: var(--r-sm, 8px);
-  padding: 8px 16px;
   font-size: 0.85rem;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   cursor: pointer;
-  transform: none;
   transition: all 0.1s ease;
 }
 
-.update-banner-btn-download:hover {
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0px rgba(0, 0, 0, 1);
+.update-banner-btn-download:hover,
+.update-banner-btn-dismiss:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--shadow-color);
   opacity: 1;
 }
 
-.update-banner-btn-download:active {
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0px rgba(0, 0, 0, 1);
+.update-banner-btn-download:active,
+.update-banner-btn-dismiss:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.update-banner-btn-download {
+  background: var(--pink, #e54b7c);
+  color: #000;
+  font-weight: bold;
+  padding: 8px 16px;
 }
 
 .update-banner-btn-dismiss {
   background: var(--bg-input, rgba(255, 255, 255, 0.05));
   color: var(--text, #fff);
-  border: var(--border-width, 2px) solid var(--border, #000);
-  box-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
-  border-radius: var(--r-sm, 8px);
   padding: 8px 14px;
-  font-size: 0.85rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: all 0.1s ease;
 }
 
 .update-banner-btn-dismiss:hover {
   background: var(--bg-card-active, rgba(255, 255, 255, 0.1));
-  transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0px rgba(0, 0, 0, 1);
-  opacity: 1;
 }
 
 /* Download Progress Overlay */
@@ -201,6 +194,7 @@
     transform: translateY(-50px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -212,6 +206,7 @@
     transform: translateY(0);
     opacity: 1;
   }
+
   to {
     transform: translateY(-50px);
     opacity: 0;
@@ -219,9 +214,12 @@
 }
 
 @keyframes iconPulse {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 2px 2px 0px rgba(0, 0, 0, 1), 0 0 0px var(--blue-glow, rgba(75, 163, 227, 0));
   }
+
   50% {
     box-shadow: 2px 2px 0px rgba(0, 0, 0, 1), 0 0 10px var(--blue-glow, rgba(75, 163, 227, 0.4));
   }
@@ -234,7 +232,7 @@
     align-items: stretch;
     gap: 12px;
   }
-  
+
   .update-banner-actions {
     justify-content: flex-end;
   }
@@ -242,9 +240,15 @@
 
 /* Spinner helper */
 @keyframes darf-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
+
 .darf-animate-spin {
   animation: darf-spin 1.2s linear infinite;
 }

@@ -1,11 +1,11 @@
 import { useUIContext }        from '../../context/UIContext';
-import { useLoreWorldContext } from '../../context/LoreWorldContext';
+import { useLoreBookContext } from '../../context/LoreBookContext';
 import { useToast }            from '../../context/ToastContext';
-import { Globe, X } from 'lucide-react';
+import { BookHeart, X } from 'lucide-react';
 
-export default function WorldModal({ isOpen }) {
+export default function LoreBookModal({ isOpen }) {
   const ui = useUIContext();
-  const lw = useLoreWorldContext();
+  const lw = useLoreBookContext();
   const { toast } = useToast();
 
   if (!isOpen) return null;
@@ -15,7 +15,7 @@ export default function WorldModal({ isOpen }) {
       <div className="modal-box glassmorphism scale-in">
         <div className="modal-header">
           <h2 id="world-modal-title">
-            <Globe size={18} /> New World Setting
+            <BookHeart size={18} /> New Lore Book
           </h2>
           <button className="modal-close-btn" onClick={() => ui.setActiveModal(null)}>
             <X size={18} />
@@ -28,13 +28,13 @@ export default function WorldModal({ isOpen }) {
               await lw.handleWorldSubmit(lw.worldForm);
               lw.setWorldForm({ name: '', description: '' });
               ui.setActiveModal(null);
-              toast.success(`World "${lw.worldForm.name}" created!`);
+              toast.success(`Lore Book "${lw.worldForm.name}" created!`);
             } catch (err) {
-              toast.error(err.message || 'Failed to create world.');
+              toast.error(err.message || 'Failed to create lore book.');
             }
           }}>
             <div className="form-group">
-              <label>World Name / Title</label>
+              <label>Lore Book Name / Title</label>
               <input
                 type="text"
                 id="world-name"
@@ -58,7 +58,7 @@ export default function WorldModal({ isOpen }) {
               <small className="help-text">Give a high-level overview of this lorebook's setting for character generation and context.</small>
             </div>
             
-            <button type="submit" className="primary-btn full-width mt-20">Save &amp; Create World</button>
+            <button type="submit" className="primary-btn full-width mt-20">Save &amp; Create Lore Book</button>
           </form>
         </div>
       </div>

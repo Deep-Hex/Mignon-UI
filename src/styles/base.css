@@ -4,7 +4,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    outline: none
+    outline: none;
 }
 
 button,
@@ -46,8 +46,6 @@ code *,
     user-select: text;
 }
 
-
-
 /* Scrollbar */
 .scrollbar-custom:not(.chat-history) {
     scroll-behavior: smooth;
@@ -86,5 +84,4 @@ code *,
 .ambient-container {
     display: none;
 }
-
 

@@ -5,7 +5,7 @@ import { useUIContext } from '../../context/UIContext';
 import { useToast } from '../../context/ToastContext';
 import { useCharacterContext } from '../../context/CharacterContext';
 import { useSettingsContext } from '../../context/SettingsContext';
-import { Trash2, User as UserIcon, Send, Scroll, Square, Plus, Ban, Check, ChevronUp, ChevronDown, X, ArrowLeft, MoreVertical, Palette } from 'lucide-react';
+import { Trash2, User as UserIcon, Send, Scroll, Square, Plus, Ban, Check, ChevronUp, X, ArrowLeft, MoreVertical, Palette, MessageSquarePlus, Sparkles } from 'lucide-react';
 import MessageBubble from './MessageBubble';
 import { getBotAccent } from '../../utils/textFormatter';
 import * as api from '../../services/api';
@@ -21,7 +21,6 @@ function ChatHeader({ activeRoom, activeRoomBots, isMenuOpen, setIsMenuOpen, ui,
           className="mobile-back-btn"
           title="Back to List"
           onClick={() => chat.setCurrentRoomId(null)}
-          style={{ display: 'none' }}
         >
           <ArrowLeft size={16} />
         </button>
@@ -45,7 +44,7 @@ function ChatHeader({ activeRoom, activeRoomBots, isMenuOpen, setIsMenuOpen, ui,
         <button
           id="btn-view-memories"
           className="icon-btn"
-          title="View Chronicle Book (Memories)"
+          title="View Smart Memory Book"
           onClick={() => ui.setActiveModal('memories')}
         >
           <Scroll size={16} />
@@ -66,7 +65,27 @@ function ChatHeader({ activeRoom, activeRoomBots, isMenuOpen, setIsMenuOpen, ui,
           </button>
 
           {isMenuOpen && (
-            <div className="chat-actions-dropdown">
+            <div className="chat-actions-dropdown glassmorphism">
+              <button
+                type="button"
+                className="dropdown-item"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  chat.handleStartNewChat(activeRoom, activeRoomBots, ui.setActiveModal, ui.setActiveTab, ui.setActiveWorldDetail);
+                }}
+              >
+                <MessageSquarePlus size={14} style={{ color: 'var(--pink)' }} /> Start New Chat
+              </button>
+              <button
+                type="button"
+                className="dropdown-item"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  ui.setActiveModal('persona-picker');
+                }}
+              >
+                <Sparkles size={14} style={{ color: 'var(--pink)' }} /> Change Persona
+              </button>
               <button
                 type="button"
                 className="dropdown-item"
@@ -75,9 +94,8 @@ function ChatHeader({ activeRoom, activeRoomBots, isMenuOpen, setIsMenuOpen, ui,
                   ui.setActiveModal('chat-theme');
                 }}
               >
-                <Palette size={14} style={{ color: 'var(--pink)' }} /> Wallpaper Settings
+                <Palette size={14} style={{ color: 'var(--pink)' }} /> Edit Background
               </button>
-              <hr className="dropdown-divider" />
               <button
                 type="button"
                 className="dropdown-item danger"
@@ -195,29 +213,8 @@ export default function ChatView() {
 
   const [isAddPickerOpen, setIsAddPickerOpen] = React.useState(false);
   const [isOrderMenuOpen, setIsOrderMenuOpen] = React.useState(false);
-  const [addPickerPos, setAddPickerPos] = React.useState({ bottom: 0, right: 0 });
-  const [orderMenuPos, setOrderMenuPos] = React.useState({ bottom: 0, right: 0 });
-  const addBtnRef = React.useRef(null);
-  const orderBtnRef = React.useRef(null);
 
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const [showScrollBtn, setShowScrollBtn] = React.useState(false);
-
-  React.useEffect(() => {
-    const el = chatHistoryRef.current;
-    if (!el) return;
-
-    const handleScroll = () => {
-      const distanceToBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
-      setShowScrollBtn(distanceToBottom > 150);
-    };
-
-    el.addEventListener('scroll', handleScroll);
-    // Initial check
-    handleScroll();
-
-    return () => el.removeEventListener('scroll', handleScroll);
-  }, [chatHistoryRef, chat.currentRoomId, chat.roomMessages]);
   const [themeConfig, setThemeConfig] = React.useState({
     themeId: 'theme-default',
     useStaticColor: false,
@@ -354,26 +351,12 @@ export default function ChatView() {
 
   const openAddPicker = (e) => {
     e.stopPropagation();
-    if (!isAddPickerOpen && addBtnRef.current) {
-      const rect = addBtnRef.current.getBoundingClientRect();
-      setAddPickerPos({
-        bottom: window.innerHeight - rect.top + 8,
-        right: window.innerWidth - rect.right,
-      });
-    }
     setIsAddPickerOpen(!isAddPickerOpen);
     setIsOrderMenuOpen(false);
   };
 
   const openOrderMenu = (e) => {
     e.stopPropagation();
-    if (!isOrderMenuOpen && orderBtnRef.current) {
-      const rect = orderBtnRef.current.getBoundingClientRect();
-      setOrderMenuPos({
-        bottom: window.innerHeight - rect.top + 8,
-        right: window.innerWidth - rect.right,
-      });
-    }
     setIsOrderMenuOpen(!isOrderMenuOpen);
     setIsAddPickerOpen(false);
   };
@@ -420,27 +403,42 @@ export default function ChatView() {
               </div>
             )
           ) : (
-            chat.roomMessages.map((m, msgIdx) => (
-              <MessageBubble
-                key={m.id || msgIdx}
-                m={m}
-                msgIdx={msgIdx}
-                activeRoomBots={chat.activeRoomBots}
-                isGenerating={chat.isGenerating}
-                isLast={msgIdx === chat.roomMessages.length - 1}
-                swipeRegenMsgId={chat.swipeRegenMsgId}
-                onSwipeMessage={chat.handleSwipeMessage}
-                onRegenerate={chat.triggerResponseRegeneration}
-                onDeleteMessage={chat.handleDeleteMessage}
-                onEditMessage={chat.handleEditMessage}
-                onTruncateMessages={chat.handleTruncateMessages}
-                onBranchRoom={chat.handleBranchRoom}
-                setCurrentRoomId={chat.setCurrentRoomId}
-                loadRoomMessages={chat.loadRoomMessages}
-                showConfirm={showConfirm}
-                toast={toast}
-              />
-            ))
+            chat.roomMessages.map((m, msgIdx) => {
+              const prevMsg = chat.roomMessages[msgIdx - 1];
+              const nextMsg = chat.roomMessages[msgIdx + 1];
+
+              const isFirstInGroup = !prevMsg ||
+                prevMsg.sender_type !== m.sender_type ||
+                (m.sender_type !== 'user' && prevMsg.character_id !== m.character_id);
+
+              const isLastInGroup = !nextMsg ||
+                nextMsg.sender_type !== m.sender_type ||
+                (m.sender_type !== 'user' && nextMsg.character_id !== m.character_id);
+
+              return (
+                <MessageBubble
+                  key={m.id || msgIdx}
+                  m={m}
+                  msgIdx={msgIdx}
+                  isFirstInGroup={isFirstInGroup}
+                  isLastInGroup={isLastInGroup}
+                  activeRoomBots={chat.activeRoomBots}
+                  isGenerating={chat.isGenerating}
+                  isLast={msgIdx === chat.roomMessages.length - 1}
+                  swipeRegenMsgId={chat.swipeRegenMsgId}
+                  onSwipeMessage={chat.handleSwipeMessage}
+                  onRegenerate={chat.triggerResponseRegeneration}
+                  onDeleteMessage={chat.handleDeleteMessage}
+                  onEditMessage={chat.handleEditMessage}
+                  onTruncateMessages={chat.handleTruncateMessages}
+                  onBranchRoom={chat.handleBranchRoom}
+                  setCurrentRoomId={chat.setCurrentRoomId}
+                  loadRoomMessages={chat.loadRoomMessages}
+                  showConfirm={showConfirm}
+                  toast={toast}
+                />
+              );
+            })
           )}
 
           {/* Typing Indicator */}
@@ -463,22 +461,7 @@ export default function ChatView() {
           )}
         </div>
 
-        {/* Scroll-to-Bottom Floating Button */}
-        {showScrollBtn && (
-          <button
-            type="button"
-            className="scroll-to-bottom-btn"
-            title="Scroll to bottom"
-            onClick={() => {
-              chatHistoryRef.current?.scrollTo({
-                top: chatHistoryRef.current.scrollHeight,
-                behavior: 'smooth'
-              });
-            }}
-          >
-            <ChevronDown size={18} />
-          </button>
-        )}
+
 
         <div className="bottom-panel">
 
@@ -536,9 +519,8 @@ export default function ChatView() {
             </div>
 
             {/* Right Side of Roster: Add Character (+) Button */}
-            <div className="companion-picker-wrapper" style={{ flexShrink: 0 }}>
+            <div className="companion-picker-wrapper" style={{ flexShrink: 0, position: 'relative' }}>
               <button
-                ref={addBtnRef}
                 id="btn-add-companion"
                 className="roster-add-btn"
                 title="Add character to chat"
@@ -546,56 +528,55 @@ export default function ChatView() {
               >
                 <Plus size={16} />
               </button>
-            </div>
 
-            {/* Add Character Dropup — fixed position to escape overflow:hidden */}
-            {isAddPickerOpen && (
-              <div
-                className="companion-picker-dropup dropup-fixed animate-pop-up"
-                style={{
-                  position: 'fixed',
-                  bottom: addPickerPos.bottom,
-                  right: addPickerPos.right,
-                  zIndex: 9999,
-                }}
-              >
-                <div className="dropup-header">Add Character</div>
-                <div className="dropup-list scrollbar-custom">
-                  {eligibleToJoin.length === 0 ? (
-                    <div className="dropup-empty">No characters available</div>
-                  ) : (
-                    eligibleToJoin.map(c => (
-                      <button
-                        key={c.id}
-                        className="dropup-char-item"
-                        onClick={() => {
-                          chat.handleAddCompanion(c.id);
-                          setIsAddPickerOpen(false);
-                        }}
-                      >
-                        {c.avatar ? (
-                          <img src={c.avatar} alt={c.name} loading="lazy" />
-                        ) : (
-                          <div className="char-avatar-placeholder">
-                            <UserIcon size={14} />
-                          </div>
-                        )}
-                        <span>{c.name}</span>
-                      </button>
-                    ))
-                  )}
+              {/* Add Character Dropup */}
+              {isAddPickerOpen && (
+                <div
+                  className="companion-picker-dropup glassmorphism animate-pop-up"
+                  style={{
+                    position: 'absolute',
+                    bottom: 'calc(100% + 12px)',
+                    left: 0,
+                    right: 'auto',
+                    zIndex: 9999,
+                  }}
+                >
+                  <div className="dropup-list scrollbar-custom">
+                    {eligibleToJoin.length === 0 ? (
+                      <div className="dropup-empty">No characters available</div>
+                    ) : (
+                      eligibleToJoin.map(c => (
+                        <button
+                          key={c.id}
+                          className="dropup-char-item"
+                          onClick={() => {
+                            chat.handleAddCompanion(c.id);
+                            setIsAddPickerOpen(false);
+                          }}
+                        >
+                          {c.avatar ? (
+                            <img src={c.avatar} alt={c.name} loading="lazy" />
+                          ) : (
+                            <div className="char-avatar-placeholder">
+                              <UserIcon size={14} />
+                            </div>
+                          )}
+                          <span>{c.name}</span>
+                        </button>
+                      ))
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
 
             {/* Spacer to push controls to the right */}
             <div style={{ flex: 1 }} />
 
             {/* Next Speaker Mode (Group Reply Order) Selector Button (Up Arrow) */}
             {chat.activeRoom.is_group && (
-              <div className="order-picker-wrapper" style={{ flexShrink: 0, marginLeft: '8px' }}>
+              <div className="order-picker-wrapper" style={{ flexShrink: 0, marginLeft: '8px', position: 'relative' }}>
                 <button
-                  ref={orderBtnRef}
                   id="btn-reply-order"
                   className="order-selector-btn"
                   title={`Reply Order Mode: ${chat.selectedTriggerBotId === 'auto' ? 'Auto (Hybrid)' : chat.selectedTriggerBotId === 'cognitive' ? 'Intelligence' : chat.selectedTriggerBotId === 'efficient' ? 'Efficient' : 'Manual'}`}
@@ -603,68 +584,69 @@ export default function ChatView() {
                 >
                   <ChevronUp size={16} />
                 </button>
-              </div>
-            )}
 
-            {/* Order Dropup — fixed position to escape overflow:hidden */}
-            {chat.activeRoom.is_group && isOrderMenuOpen && (
-              <div
-                className="companion-picker-dropup dropup-fixed animate-pop-up reply-order-dropup"
-                style={{
-                  position: 'fixed',
-                  bottom: orderMenuPos.bottom,
-                  right: orderMenuPos.right,
-                  width: '240px',
-                  zIndex: 9999,
-                }}
-              >
-                <div className="dropup-header">Next Speaker Mode</div>
-                <div className="dropup-list">
-                  <ReplyOrderOption
-                    modeId="auto"
-                    activeModeId={chat.selectedTriggerBotId}
-                    title="Auto (Hybrid Mode)"
-                    subtitle="Proximity boosts & constraints"
-                    icon={<ChevronUp size={14} />}
-                    onClick={() => {
-                      chat.setSelectedTriggerBotId('auto');
-                      setIsOrderMenuOpen(false);
+                {/* Order Dropup */}
+                {isOrderMenuOpen && (
+                  <div
+                    className="companion-picker-dropup glassmorphism animate-pop-up reply-order-dropup"
+                    style={{
+                      position: 'absolute',
+                      bottom: 'calc(100% + 12px)',
+                      right: 0,
+                      left: 'auto',
+                      width: '240px',
+                      zIndex: 9999,
                     }}
-                  />
-                  <ReplyOrderOption
-                    modeId="cognitive"
-                    activeModeId={chat.selectedTriggerBotId}
-                    title="Intelligence (Cognitive)"
-                    subtitle="Single-call LLM mind auction"
-                    icon={<ChevronUp size={14} style={{ transform: 'rotate(90deg)' }} />}
-                    onClick={() => {
-                      chat.setSelectedTriggerBotId('cognitive');
-                      setIsOrderMenuOpen(false);
-                    }}
-                  />
-                  <ReplyOrderOption
-                    modeId="efficient"
-                    activeModeId={chat.selectedTriggerBotId}
-                    title="Efficient (Math Model)"
-                    subtitle="Fast sacks model, zero overhead"
-                    icon={<ChevronUp size={14} style={{ transform: 'rotate(180deg)' }} />}
-                    onClick={() => {
-                      chat.setSelectedTriggerBotId('efficient');
-                      setIsOrderMenuOpen(false);
-                    }}
-                  />
-                  <ReplyOrderOption
-                    modeId={null}
-                    activeModeId={chat.selectedTriggerBotId}
-                    title="Manual (Click Roster)"
-                    subtitle="Choose speaker manually"
-                    icon={<UserIcon size={14} />}
-                    onClick={() => {
-                      chat.setSelectedTriggerBotId(null);
-                      setIsOrderMenuOpen(false);
-                    }}
-                  />
-                </div>
+                  >
+                    <div className="dropup-header">Next Speaker Mode</div>
+                    <div className="dropup-list">
+                      <ReplyOrderOption
+                        modeId="auto"
+                        activeModeId={chat.selectedTriggerBotId}
+                        title="Auto (Hybrid Mode)"
+                        subtitle="Proximity boosts & constraints"
+                        icon={<ChevronUp size={14} />}
+                        onClick={() => {
+                          chat.setSelectedTriggerBotId('auto');
+                          setIsOrderMenuOpen(false);
+                        }}
+                      />
+                      <ReplyOrderOption
+                        modeId="cognitive"
+                        activeModeId={chat.selectedTriggerBotId}
+                        title="Intelligence (Cognitive)"
+                        subtitle="Single-call LLM mind auction"
+                        icon={<ChevronUp size={14} style={{ transform: 'rotate(90deg)' }} />}
+                        onClick={() => {
+                          chat.setSelectedTriggerBotId('cognitive');
+                          setIsOrderMenuOpen(false);
+                        }}
+                      />
+                      <ReplyOrderOption
+                        modeId="efficient"
+                        activeModeId={chat.selectedTriggerBotId}
+                        title="Efficient (Math Model)"
+                        subtitle="Fast sacks model, zero overhead"
+                        icon={<ChevronUp size={14} style={{ transform: 'rotate(180deg)' }} />}
+                        onClick={() => {
+                          chat.setSelectedTriggerBotId('efficient');
+                          setIsOrderMenuOpen(false);
+                        }}
+                      />
+                      <ReplyOrderOption
+                        modeId={null}
+                        activeModeId={chat.selectedTriggerBotId}
+                        title="Manual (Click Roster)"
+                        subtitle="Choose speaker manually"
+                        icon={<UserIcon size={14} />}
+                        onClick={() => {
+                          chat.setSelectedTriggerBotId(null);
+                          setIsOrderMenuOpen(false);
+                        }}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 

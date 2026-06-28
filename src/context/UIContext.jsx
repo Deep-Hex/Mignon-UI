@@ -47,6 +47,7 @@ export function UIProvider({ children }) {
   const [activeTab, setActiveTab] = useState(() => localStorage.getItem('rp_active_tab') || 'chars');
   const [activeModal, setActiveModal] = useState(null);
   const [activeWorldDetail, setActiveWorldDetail] = useState(() => localStorage.getItem('rp_active_world_detail') === 'true');
+  const [searchLoreQuery, setSearchLoreQuery] = useState('');
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('theme');
     return saved || 'system';
@@ -118,16 +119,16 @@ export function UIProvider({ children }) {
   useEffect(() => {
     localStorage.setItem('theme', theme);
     localStorage.setItem('theme_design', themeDesign);
-    
+
     const root = document.documentElement;
-    
+
     // Remove all possible theme classes
     const themeIds = ['bubblegum', 'cyberpunk', 'dollhouse', 'builder', 'classic', 'darkyellow', 'sketchbook'];
     themeIds.forEach(id => {
       root.classList.remove(`theme-${id}-light`);
       root.classList.remove(`theme-${id}-dark`);
     });
-    
+
     // Add current theme class
     root.classList.add(`theme-${themeDesign}-${resolvedTheme}`);
 
@@ -164,12 +165,13 @@ export function UIProvider({ children }) {
     activeTab, setActiveTab,
     activeModal, setActiveModal,
     activeWorldDetail, setActiveWorldDetail,
+    searchLoreQuery, setSearchLoreQuery,
     theme, toggleTheme, setTheme, resolvedTheme,
     themeDesign, setThemeDesign, THEMES, isMobileDevice,
     showOnboarding, setShowOnboarding, completeOnboarding, startOnboarding
   }), [
     activeTab, activeModal,
-    activeWorldDetail, theme, toggleTheme, resolvedTheme,
+    activeWorldDetail, searchLoreQuery, theme, toggleTheme, resolvedTheme,
     themeDesign, isMobileDevice,
     showOnboarding, completeOnboarding, startOnboarding
   ]);

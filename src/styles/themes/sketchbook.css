@@ -27,6 +27,7 @@
     --text-tab-active: #1a2327;
     --bg-card-hover: #fbfaf5;
     --bg-card-active: #f5f3e9;
+    --bg-card: var(--bg-window);
 
     /* Sketchbook Bot Accents - Crayon Highlighter Tones (Light Mode) */
     --accent-cyan-bg: #dbeafe;
@@ -53,6 +54,7 @@
     --shadow-sm: none ;
     /* No shadows anywhere */
     --shadow-md: none ;
+    --shadow-lg: none ;
 
     --pink: #db2777;
     --blue: #2563eb;
@@ -101,6 +103,7 @@
     --text-tab-active: #ffffff;
     --bg-card-hover: #202024;
     --bg-card-active: #27272a;
+    --bg-card: var(--bg-window);
 
     /* Sketchbook Bot Accents - Luminous Chalk Tones (Dark Mode) */
     --accent-cyan-bg: #1e3a8a;
@@ -126,6 +129,7 @@
     --shadow-color: #0a0a0c;
     --shadow-sm: none ;
     --shadow-md: none ;
+    --shadow-lg: none ;
 
     --pink: #f472b6;
     /* Chalk Pink */

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   6. DARK YELLOW (Batman / Gotham City — Dark Gothic Grit)
+   6. DARK YELLOW (High-Contrast Gold & Steel — Dark Gothic Grit)
    ========================================================================== */
 
 /* Light Mode — Rain-slicked Gotham concrete, daylight brutalist */
@@ -20,13 +20,14 @@
     --text-tab-active: #0a0a0b;
     --bg-card-hover: #d6d3cc;
     --bg-card-active: #c0bdb6;
+    --bg-card: var(--bg-window);
 
-    /* Dark Yellow bot accents - Atmospheric Gritty Gotham Tones (Light Mode) */
-    --accent-cyan-bg: #afdce5;      /* Detective Mode Visor HUD */
-    --accent-magenta-bg: #f5c400;   /* Bat-Signal Amber */
+    /* Dark Yellow bot accents - Atmospheric Gritty Tones (Light Mode) */
+    --accent-cyan-bg: #afdce5;      /* Tech Cyan HUD */
+    --accent-magenta-bg: #f5c400;   /* Signal Amber Gold */
     --accent-purple-bg: #c8cdd6;    /* Armored Steel Blue */
     --accent-amber-bg: #e5b700;     /* Deep Signal Gold */
-    --accent-emerald-bg: #c1dcc1;    /* Poison Ivy Pale Toxic Green */
+    --accent-emerald-bg: #c1dcc1;    /* Pale Toxic Green */
 
     --accent-cyan-text: #0a0a0b;
     --accent-magenta-text: #0a0a0b;
@@ -39,11 +40,12 @@
     --shadow-color: rgba(0, 0, 0, 0.1);
     --shadow-sm: 0 2px 8px var(--shadow-color);
     --shadow-md: 0 8px 24px var(--shadow-color);
+    --shadow-lg: 0 12px 32px var(--shadow-color);
 
-    --pink: #f5c400;             /* Bat-signal amber — primary accent */
+    --pink: #f5c400;             /* Signal amber — primary accent */
     --blue: #c9a200;             /* Darker amber — secondary accent */
     --purple: #a07800;           /* Deep bronze amber — tertiary accent */
-    --primary: #1a1a1c;          /* Gotham steel-black */
+    --primary: #1a1a1c;          /* Dark steel-black */
     --primary-text: #f5c400;
     --cat-fur: #1a1a1c;          /* Dark gothic cat */
 
@@ -57,34 +59,35 @@
     --font-head: 'Bebas Neue', sans-serif;
 }
 
-/* Dark Mode — Gotham at night: deep black, amber bat-signal glow */
+/* Dark Mode — Dark at night: deep black, amber signal glow */
 .theme-darkyellow-dark,
 .dark-theme.theme-darkyellow-dark {
-    --bg: #080808;               /* Absolute Gotham black */
+    --bg: #080808;               /* Absolute deep black */
     --bg-dot: #111113;           /* Near-invisible dark mesh dot */
     --bg-window: #0f0f11;        /* Dark steel panel */
     --bg-chat: #0f0f11;
     --bg-input: #1a1a1e;         /* Gunmetal input */
     --bg-bubble-bot: #1e1e22;    /* Shadow-dark bot bubble */
-    --bg-bubble-user: #3a2e00;   /* Deep bat-signal amber user bubble */
+    --bg-bubble-user: #3a2e00;   /* Deep signal amber user bubble */
     --text-bubble-bot: #e8e5dc;  /* Aged parchment on dark shadow bubble */
     --text-bubble-user: #f5c400; /* Glowing amber text on deep amber bubble */
     --bg-grid: #141416;          /* Black steel grid */
     --bg-lore-hover: #161618;
     --bg-nav-container: #0f0f11;
     --bg-tab-active: #0f0f11;
-    --text-tab-active: #f5c400;  /* Bat-signal amber */
+    --text-tab-active: #f5c400;  /* Signal amber gold */
     --bg-card-hover: #1a1a1e;
     --bg-card-active: #1a1a1e;
+    --bg-card: var(--bg-window);
 
-    /* Dark Yellow bot accents - Atmospheric Gritty Gotham Tones (Dark Mode) */
-    --accent-cyan-bg: #0a343c;      /* Detective HUD (Deep Blue Glow) */
+    /* Dark Yellow bot accents - Atmospheric Gritty Tones (Dark Mode) */
+    --accent-cyan-bg: #0a343c;      /* Tactical HUD (Deep Blue Glow) */
     --accent-magenta-bg: #1a1a1c;   /* Wet Asphalt concrete shadow */
     --accent-purple-bg: #181e28;    /* Deep Armored Steel */
     --accent-amber-bg: #3a2e00;     /* Signal Amber Yellow Glow */
     --accent-emerald-bg: #0b2b14;    /* Toxic Green Shadow */
 
-    --accent-cyan-text: #7de5ff;    /* Glowing Detective Blue */
+    --accent-cyan-text: #7de5ff;    /* Glowing Tactical Blue */
     --accent-magenta-text: #e8e5dc;
     --accent-purple-text: #c8cdd6;
     --accent-amber-text: #f5c400;   /* Glowing Yellow Signal */
@@ -94,8 +97,9 @@
     --border-width: 2px;
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 4px rgba(245, 196, 0, 0.15);
     --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 16px rgba(245, 196, 0, 0.1);
+    --shadow-lg: 0 15px 40px rgba(0, 0, 0, 0.7), 0 0 24px rgba(245, 196, 0, 0.15);
 
-    --pink: #f5c400;             /* Bat-signal amber — primary accent */
+    --pink: #f5c400;             /* Signal amber — primary accent */
     --blue: #c9a200;             /* Darker amber — secondary accent */
     --purple: #a07800;           /* Deep bronze amber — tertiary accent */
     --primary: #f5c400;          /* Amber brand accent */
@@ -104,7 +108,7 @@
 
     --text: #e8e5dc;             /* Aged parchment white */
     --text-sec: #9a9890;         /* Concrete dust */
-    --text-muted: #5a5856;       /* Gotham shadow grey */
+    --text-muted: #5a5856;       /* Dark shadow grey */
 
     --status-online: #a2e8a2;    /* Glowing Toxic Green */
     --status-offline: #ef4444;   /* Glowing Crimson Red */

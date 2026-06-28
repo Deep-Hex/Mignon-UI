@@ -4,12 +4,11 @@
     flex-shrink: 0;
     background: var(--bg-window);
     border: var(--border-width) solid var(--border);
-    border-radius: var(--r-md);
+    border-radius: var(--r-lg);
     display: flex;
     flex-direction: column;
     height: 100%;
     z-index: 12;
-    box-shadow: var(--shadow-md);
     overflow: hidden;
 }
 
@@ -27,7 +26,7 @@
 .logo {
     display: flex;
     align-items: center;
-    gap: 8px
+    gap: 8px;
 }
 
 .logo-icon {
@@ -68,6 +67,11 @@
 }
 
 .icon-btn:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px var(--shadow-color);
+}
+
+.icon-btn:active {
     transform: translate(2px, 2px);
     box-shadow: none;
 }
@@ -78,7 +82,7 @@
 
 .icon-btn i {
     width: 16px;
-    height: 16px
+    height: 16px;
 }
 
 /* Tabs */
@@ -114,7 +118,7 @@
 
 .tab-btn .tab-icon {
     width: 16px;
-    height: 16px
+    height: 16px;
 }
 
 .tab-btn.active {
@@ -136,7 +140,8 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    min-height: 0; /* Prevents nested flex scroll items from breaking */
+    min-height: 0;
+    /* Prevents nested flex scroll items from breaking */
 }
 
 .tab-content-track {
@@ -154,7 +159,7 @@
     flex-direction: column;
     height: 100%;
     overflow: hidden;
-    padding: 16px;
+    padding: 16px 12px;
     background: var(--bg-window);
     box-sizing: border-box;
 }
@@ -167,23 +172,27 @@
     width: 100%;
 }
 
-.action-bar > button,
-.action-bar > label {
-    flex: 1 1 50%;
-    width: 50%;
+.action-bar>button,
+.action-bar>label {
+    flex: 1 1 0;
+    min-width: 0;
     box-sizing: border-box;
+    display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 4px;
     white-space: nowrap;
     text-align: center;
+    padding: 10px 8px !important;
 }
 
 /* Search */
 .search-bar {
     position: relative;
-    margin-bottom: 16px
+    margin-bottom: 16px;
 }
 
-.search-icon {
+.search-bar .search-icon {
     position: absolute;
     left: 12px;
     top: 50%;
@@ -214,7 +223,7 @@
 
 /* Sidebar footer */
 .sidebar-footer {
-    margin-top: auto
+    margin-top: auto;
 }
 
 .sidebar-footer-btn {

@@ -8,8 +8,10 @@ import { APP_VERSION } from '../../config';
 import { 
   Settings as SettingsIcon, X, Smile, Plus, User as UserIcon, 
   Sparkles, Sun, Moon, Monitor, Save, Pencil, Trash2, RefreshCw, 
-  Info, FilePlus, ArrowDownToLine, Check, AlertTriangle 
+  Info, FilePlus, ArrowDownToLine, Check, AlertTriangle, Activity, Loader2,
+  Eye, EyeOff
 } from 'lucide-react';
+import { getThemeSwatches } from '../../utils/themeHelper';
 
 export default function SettingsModal({ isOpen, isInline }) {
   const ui = useUIContext();
@@ -25,7 +27,37 @@ export default function SettingsModal({ isOpen, isInline }) {
   } = useConnectionProfiles();
   const [isEditingStickers, setIsEditingStickers] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isTestingConnection, setIsTestingConnection] = useState(false);
+  const [showOpenrouterKey, setShowOpenrouterKey] = useState(false);
+  const [showCustomKey, setShowCustomKey] = useState(false);
   const personaAvatarInputRef = useRef(null);
+  const mouseDownTargetRef = useRef(null);
+
+  // Connection Profile Inline Editing
+  const [editingProfileType, setEditingProfileType] = useState(null); // 'new', 'rename', or null
+  const [editProfileName, setEditProfileName] = useState('');
+
+  const handleSaveProfile = async () => {
+    const trimmed = editProfileName.trim();
+    if (!trimmed) return;
+    if (editingProfileType === 'new') {
+      try {
+        await saveNewProfile(trimmed);
+        toast.success("Profile created and activated!");
+        setEditingProfileType(null);
+      } catch (err) {
+        toast.error(err.message || "Failed to create profile.");
+      }
+    } else if (editingProfileType === 'rename') {
+      try {
+        await renameActiveProfile(trimmed);
+        toast.success("Profile renamed successfully!");
+        setEditingProfileType(null);
+      } catch (err) {
+        toast.error(err.message || "Failed to rename profile.");
+      }
+    }
+  };
 
   // Software Update States
   const [updateChecking, setUpdateChecking] = useState(false);
@@ -114,126 +146,172 @@ export default function SettingsModal({ isOpen, isInline }) {
             </label>
           </div>
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-            <select
-              id="setting-profile-select"
-              style={{ flex: 1, margin: 0 }}
-              value={settings.settingsForm.current_profile_id || ''}
-              onChange={async (e) => {
-                const val = e.target.value ? parseInt(e.target.value) : null;
-                try {
-                  await activateProfile(val);
-                  toast.success(val ? "Profile activated!" : "Profile cleared.");
-                } catch {
-                  toast.error("Failed to change profile.");
-                }
-              }}
-            >
-              <option value="">&lt;None&gt;</option>
-              {profiles.map(p => (
-                <option key={p.id} value={p.id}>{p.name}</option>
-              ))}
-            </select>
+            {editingProfileType ? (
+              <>
+                <input
+                  type="text"
+                  className="rename-input"
+                  style={{ flex: 1, height: '36px' }}
+                  placeholder={editingProfileType === 'new' ? "Enter profile name..." : "Enter new name..."}
+                  value={editProfileName}
+                  onChange={(e) => setEditProfileName(e.target.value)}
+                  onKeyDown={async (e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      await handleSaveProfile();
+                    } else if (e.key === 'Escape') {
+                      setEditingProfileType(null);
+                    }
+                  }}
+                  autoFocus
+                />
+                <button
+                  type="button"
+                  className="secondary-btn"
+                  style={{ padding: '8px', minWidth: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  title="Save Name"
+                  onClick={handleSaveProfile}
+                >
+                  <Check size={16} />
+                </button>
+                <button
+                  type="button"
+                  className="secondary-btn"
+                  style={{ padding: '8px', minWidth: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  title="Cancel"
+                  onClick={() => setEditingProfileType(null)}
+                >
+                  <X size={16} />
+                </button>
+              </>
+            ) : (
+              <>
+                <select
+                  id="setting-profile-select"
+                  style={{ flex: 1, margin: 0 }}
+                  value={settings.settingsForm.current_profile_id || ''}
+                  onChange={async (e) => {
+                    const val = e.target.value ? parseInt(e.target.value) : null;
+                    try {
+                      await activateProfile(val);
+                      toast.success(val ? "Profile activated!" : "Profile cleared.");
+                    } catch {
+                      toast.error("Failed to change profile.");
+                    }
+                  }}
+                >
+                  <option value="">&lt;None&gt;</option>
+                  {profiles.map(p => (
+                    <option key={p.id} value={p.id}>{p.name}</option>
+                  ))}
+                </select>
 
-            {/* Action Buttons */}
-            <div style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
-              {/* New Profile */}
-              <button
-                type="button"
-                className="secondary-btn"
-                style={{ padding: '8px', minWidth: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                title="New Profile"
-                onClick={async () => {
-                  const name = prompt("Enter a unique name for this profile:");
-                  if (!name || !name.trim()) return;
-                  try {
-                    await saveNewProfile(name.trim());
-                    toast.success("Profile created and activated!");
-                  } catch (err) {
-                    toast.error(err.message || "Failed to create profile.");
-                  }
-                }}
-              >
-                <FilePlus size={16} />
-              </button>
+                {/* Action Buttons */}
+                <div style={{ display: 'flex', gap: '4px', flexShrink: 0 }}>
+                  {/* New Profile */}
+                  <button
+                    type="button"
+                    className="secondary-btn"
+                    style={{ padding: '8px', minWidth: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    title="New Profile"
+                    onClick={() => {
+                      setEditingProfileType('new');
+                      setEditProfileName('');
+                    }}
+                  >
+                    <FilePlus size={16} />
+                  </button>
 
-              {/* Save Profile */}
-              <button
-                type="button"
-                className="secondary-btn"
-                disabled={!settings.settingsForm.current_profile_id}
-                style={{ padding: '8px', minWidth: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: settings.settingsForm.current_profile_id ? 1 : 0.5 }}
-                title="Save Current Settings to Profile"
-                onClick={async () => {
-                  if (!settings.settingsForm.current_profile_id) return;
-                  try {
-                    await saveActiveProfile();
-                    toast.success("Profile overwritten successfully!");
-                  } catch {
-                    toast.error("Failed to save profile.");
-                  }
-                }}
-              >
-                <Save size={16} />
-              </button>
+                  {/* Save Profile */}
+                  <button
+                    type="button"
+                    className="secondary-btn"
+                    disabled={!settings.settingsForm.current_profile_id}
+                    style={{ padding: '8px', minWidth: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: settings.settingsForm.current_profile_id ? 1 : 0.5 }}
+                    title="Save Current Settings to Profile"
+                    onClick={async () => {
+                      if (!settings.settingsForm.current_profile_id) return;
+                      try {
+                        await saveActiveProfile();
+                        toast.success("Profile overwritten successfully!");
+                      } catch {
+                        toast.error("Failed to save profile.");
+                      }
+                    }}
+                  >
+                    <Save size={16} />
+                  </button>
 
-              {/* Rename Profile */}
-              <button
-                type="button"
-                className="secondary-btn"
-                disabled={!settings.settingsForm.current_profile_id}
-                style={{ padding: '8px', minWidth: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: settings.settingsForm.current_profile_id ? 1 : 0.5 }}
-                title="Rename Profile"
-                onClick={async () => {
-                  const activeId = settings.settingsForm.current_profile_id;
-                  if (!activeId) return;
-                  const currProf = profiles.find(p => p.id === activeId);
-                  const newName = prompt("Rename profile to:", currProf ? currProf.name : "");
-                  if (!newName || !newName.trim()) return;
-                  try {
-                    await renameActiveProfile(newName.trim());
-                    toast.success("Profile renamed successfully!");
-                  } catch (err) {
-                    toast.error(err.message || "Failed to rename profile.");
-                  }
-                }}
-              >
-                <Pencil size={16} />
-              </button>
+                  {/* Rename Profile */}
+                  <button
+                    type="button"
+                    className="secondary-btn"
+                    disabled={!settings.settingsForm.current_profile_id}
+                    style={{ padding: '8px', minWidth: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: settings.settingsForm.current_profile_id ? 1 : 0.5 }}
+                    title="Rename Profile"
+                    onClick={() => {
+                      const activeId = settings.settingsForm.current_profile_id;
+                      if (!activeId) return;
+                      const currProf = profiles.find(p => p.id === activeId);
+                      setEditingProfileType('rename');
+                      setEditProfileName(currProf ? currProf.name : '');
+                    }}
+                  >
+                    <Pencil size={16} />
+                  </button>
 
-              {/* Refresh (Test Connection) */}
-              <button
-                type="button"
-                className="secondary-btn"
-                style={{ padding: '8px', minWidth: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                title="Test Connection"
-                onClick={async () => {
-                  toast.info("Testing connection...");
-                  await settings.checkEngineConnection();
-                }}
-              >
-                <RefreshCw size={16} />
-              </button>
+                  {/* Refresh (Test Connection) */}
+                  <button
+                    type="button"
+                    className="secondary-btn"
+                    disabled={isTestingConnection}
+                    style={{ padding: '8px', minWidth: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    title="Test Connection"
+                    onClick={async () => {
+                      setIsTestingConnection(true);
+                      try {
+                        const res = await settings.checkEngineConnection();
+                        if (res && res.status === 'success') {
+                          toast.success("Connection successful!");
+                        } else {
+                          toast.error(res?.message || "Failed to connect. Please check endpoint and credentials.");
+                        }
+                      } catch {
+                        toast.error("Failed to connect. Please check endpoint and credentials.");
+                      } finally {
+                        setIsTestingConnection(false);
+                      }
+                    }}
+                  >
+                    {isTestingConnection ? (
+                      <Loader2 size={16} className="animate-spin" />
+                    ) : (
+                      <Activity size={16} />
+                    )}
+                  </button>
 
-              {/* Delete Profile */}
-              <button
-                type="button"
-                className="secondary-btn"
-                disabled={!settings.settingsForm.current_profile_id}
-                style={{ padding: '8px', minWidth: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: settings.settingsForm.current_profile_id ? 1 : 0.5 }}
-                title="Delete Profile"
-                onClick={async () => {
-                  if (!confirm("Are you sure you want to delete this profile? Current settings values will be preserved in your form, but the profile will be removed.")) return;
-                  try {
-                    await deleteActiveProfile();
-                    toast.success("Profile deleted.");
-                  } catch {
-                    toast.error("Failed to delete profile.");
-                  }
-                }}
-              >
-                <Trash2 size={16} />
-              </button>
-            </div>
+                  {/* Delete Profile */}
+                  <button
+                    type="button"
+                    className="secondary-btn"
+                    disabled={!settings.settingsForm.current_profile_id}
+                    style={{ padding: '8px', minWidth: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: settings.settingsForm.current_profile_id ? 1 : 0.5 }}
+                    title="Delete Profile"
+                    onClick={async () => {
+                      if (!confirm("Are you sure you want to delete this profile? Current settings values will be preserved in your form, but the profile will be removed.")) return;
+                      try {
+                        await deleteActiveProfile();
+                        toast.success("Profile deleted.");
+                      } catch {
+                        toast.error("Failed to delete profile.");
+                      }
+                    }}
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -270,13 +348,28 @@ export default function SettingsModal({ isOpen, isInline }) {
         {settings.settingsForm.provider === "openrouter" && (
           <div className="form-group" id="group-openrouter-key">
             <label>OpenRouter API Key</label>
-            <input
-              type="password"
-              id="setting-openrouter-key"
-              placeholder="sk-or-v1-..."
-              value={settings.settingsForm.openrouter_key}
-              onChange={(e) => settings.setSettingsForm(prev => ({ ...prev, openrouter_key: e.target.value }))}
-            />
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+              <input
+                type={showOpenrouterKey ? 'text' : 'password'}
+                id="setting-openrouter-key"
+                placeholder="sk-or-v1-..."
+                value={settings.settingsForm.openrouter_key}
+                onChange={(e) => settings.setSettingsForm(prev => ({ ...prev, openrouter_key: e.target.value }))}
+                style={{ paddingRight: '40px', width: '100%' }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowOpenrouterKey(v => !v)}
+                title={showOpenrouterKey ? 'Hide key' : 'Show key'}
+                style={{
+                  position: 'absolute', right: '10px',
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  color: 'var(--text-muted)', padding: '0', display: 'flex', alignItems: 'center'
+                }}
+              >
+                {showOpenrouterKey ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
             <small className="help-text">Your key is stored locally in SQLite only.</small>
           </div>
         )}
@@ -284,13 +377,28 @@ export default function SettingsModal({ isOpen, isInline }) {
         {settings.settingsForm.provider === "custom" && (
           <div className="form-group" id="group-custom-key">
             <label>Custom API Key (Optional)</label>
-            <input
-              type="password"
-              id="setting-custom-key"
-              placeholder="Enter API key..."
-              value={settings.settingsForm.custom_key || ''}
-              onChange={(e) => settings.setSettingsForm(prev => ({ ...prev, custom_key: e.target.value }))}
-            />
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+              <input
+                type={showCustomKey ? 'text' : 'password'}
+                id="setting-custom-key"
+                placeholder="Enter API key..."
+                value={settings.settingsForm.custom_key || ''}
+                onChange={(e) => settings.setSettingsForm(prev => ({ ...prev, custom_key: e.target.value }))}
+                style={{ paddingRight: '40px', width: '100%' }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowCustomKey(v => !v)}
+                title={showCustomKey ? 'Hide key' : 'Show key'}
+                style={{
+                  position: 'absolute', right: '10px',
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  color: 'var(--text-muted)', padding: '0', display: 'flex', alignItems: 'center'
+                }}
+              >
+                {showCustomKey ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
             <small className="help-text">Securely stored for OpenAI, Gemini, DeepSeek, Anthropic, etc.</small>
           </div>
         )}
@@ -454,7 +562,7 @@ export default function SettingsModal({ isOpen, isInline }) {
         {/* ── UI STICKERS ── */}
         <div className="form-group" style={{ marginTop: '24px', borderTop: 'var(--border-width) solid var(--border)', paddingTop: '20px' }}>
           <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'var(--font-head)', fontWeight: 'bold', fontSize: '1rem', textTransform: 'uppercase' }}>
-            <Smile size={18} /> UI Decals &amp; Stickers
+            <Smile size={18} /> UI Stickers
             <span style={{
               fontSize: '0.62rem',
               padding: '2px 6px',
@@ -481,7 +589,7 @@ export default function SettingsModal({ isOpen, isInline }) {
               style={{ flex: 1, padding: '8px 12px', fontSize: '0.8rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
               onClick={() => window.dispatchEvent(new CustomEvent('sticker-trigger-upload'))}
             >
-              <Plus size={14} /> Add Decal
+              <Plus size={14} /> Add Sticker
             </button>
             <button
               type="button"
@@ -493,7 +601,7 @@ export default function SettingsModal({ isOpen, isInline }) {
               }}
               onClick={() => window.dispatchEvent(new CustomEvent('sticker-toggle-editing'))}
             >
-              {isEditingStickers ? "Lock Positions" : "Reposition Decals"}
+              {isEditingStickers ? "Lock Positions" : "Reposition Stickers"}
             </button>
           </div>
         </div>
@@ -576,15 +684,7 @@ export default function SettingsModal({ isOpen, isInline }) {
             {ui.THEMES.map((t) => {
               const isActive = ui.themeDesign === t.id;
               const isDark = ui.resolvedTheme === 'dark';
-              const swatches = {
-                bubblegum: isDark ? ['#e54b7c', '#4ba3e3'] : ['#ffb7ce', '#a3defe'],
-                cyberpunk: ['#ff007f', '#00f0ff'],
-                dollhouse: isDark ? ['#ff1493', '#210035'] : ['#ff1493', '#fff0f5'],
-                builder: isDark ? ['#f5c400', '#00852b'] : ['#d31212', '#0055a5'],
-                classic: isDark ? ['#38bdf8', '#090d16'] : ['#2563eb', '#e2e8f0'],
-                darkyellow: isDark ? ['#f5c400', '#080808'] : ['#f5c400', '#1a1a1c'],
-                sketchbook: isDark ? ['#ffd700', '#18181b'] : ['#fcfaf2', '#2f3e46']
-              }[t.id];
+              const swatches = getThemeSwatches(t.id, isDark);
 
               return (
                 <div
@@ -759,8 +859,11 @@ export default function SettingsModal({ isOpen, isInline }) {
     <div
       className="modal-backdrop active"
       id="modal-settings"
+      onMouseDown={(e) => {
+        mouseDownTargetRef.current = e.target;
+      }}
       onClick={(e) => {
-        if (e.target.id === 'modal-settings') {
+        if (e.target.id === 'modal-settings' && mouseDownTargetRef.current?.id === 'modal-settings') {
           handleClose();
         }
       }}

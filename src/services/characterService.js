@@ -3,7 +3,7 @@
 
 import * as crud from './crud';
 import * as rag from './rag';
-import { parseTavernPng, extractAvatarUrlFromPngBytes } from './tavernParser';
+import { parseTavernPng, extractAvatarUrlFromPngBytes, parseTavernJson } from './tavernParser';
 
 export async function fetchCharacters() {
   return crud.getCharacters();
@@ -26,12 +26,53 @@ export async function deleteCharacter(id) {
 }
 
 export async function importTavernCard(file) {
+  // --- JSON character card import ---
+  if (file.name.toLowerCase().endsWith('.json') || file.type === 'application/json') {
+    try {
+      const text = await file.text();
+      const rawJson = JSON.parse(text);
+      const charData = parseTavernJson(rawJson);
+      if (!charData) {
+        throw new Error('Failed to parse character data from JSON card.');
+      }
+      charData.avatar = null; // JSON cards don't embed an avatar image
+
+      const savedChar = await crud.createCharacter(charData);
+
+      if (charData.lore_entries && charData.lore_entries.length > 0) {
+        const newWorld = await crud.createWorld({
+          name: `${charData.name} World Settings`,
+          description: `Auto-generated world for Tavern Card character: ${charData.name}`
+        });
+        await crud.updateCharacter(savedChar.id, { ...savedChar, world_id: newWorld.id });
+
+        for (const entry of charData.lore_entries) {
+          const savedLore = await crud.createLore({
+            world_id: newWorld.id,
+            title: entry.title,
+            keys: entry.keys,
+            content: entry.content,
+            weight: entry.weight
+          });
+          const embeddingText = `[LORE: ${entry.title}]\nTrigger keywords: ${entry.keys}\n\n${entry.content}`;
+          await rag.saveEmbedding(`lore_${savedLore.id}`, 'lore', String(newWorld.id), entry.title, embeddingText);
+        }
+      }
+
+      return savedChar;
+    } catch (e) {
+      console.error('[API] JSON card import error:', e);
+      throw e;
+    }
+  }
+
+  // --- PNG character card import ---
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = async (event) => {
       try {
         const arrayBuffer = event.target.result;
-        
+
         // 1. Parse Tavern character sheet png chunks
         const charData = parseTavernPng(arrayBuffer);
         if (!charData) {
@@ -82,3 +123,4 @@ export async function importTavernCard(file) {
     reader.readAsArrayBuffer(file);
   });
 }
+

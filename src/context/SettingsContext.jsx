@@ -78,13 +78,16 @@ export function SettingsProvider({ children }) {
             return { ...prev, selected_model: data.active_model };
           });
         }
+        return data;
       } else {
         setEngineOnline(false);
         setEngineStatus(data.message || 'Engine Offline');
+        return data;
       }
-    } catch {
+    } catch (e) {
       setEngineOnline(false);
       setEngineStatus('Engine Offline');
+      return { status: 'disconnected', message: e?.message || 'Engine Offline' };
     }
   }, []);
 
